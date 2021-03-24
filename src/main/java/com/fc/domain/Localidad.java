@@ -33,7 +33,7 @@ public class Localidad {
 	}
 
 	public Localidad(String nombre) {
-		this.nombre=nombre;
+		this.nombre = nombre;
 	}
 
 	public Localidad(String nombre, Provincia provincia) {
@@ -41,7 +41,7 @@ public class Localidad {
 		this.provincia = provincia;
 	}
 
-	// ===================GETTERS Y SETTERS===========================
+// ===================GETTERS Y SETTERS===========================
 	public Long getId() {
 		return id;
 	}

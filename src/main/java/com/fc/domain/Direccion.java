@@ -4,10 +4,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "direccion")
-public class Direccion{
+public class Direccion {
 
 //===================VARIABLES===================================
 
@@ -21,16 +22,16 @@ public class Direccion{
 	@NotEmpty
 	private Integer numero;
 
-	@Column(nullable=true)
+	@Column(nullable = true)
 	private String bloque;
 
-	@Column(nullable=true)
+	@Column(nullable = true)
 	private Integer escalera;
 
-	@Column(nullable=true)
+	@Column(nullable = true)
 	private Integer piso;
 
-	@Column(nullable=true)
+	@Column(nullable = true)
 	private String puerta;
 
 	@NotEmpty
@@ -39,9 +40,13 @@ public class Direccion{
 	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Localidad localidad;
-	
+
+	@JsonIgnore
+	@OneToOne(mappedBy = "direccion", cascade = CascadeType.ALL)
+	private Usuario usuario;
+
 //===============================================================
-	
+
 // ===================GETTERS Y SETTERS===========================
 
 	public Long getId() {
@@ -70,6 +75,14 @@ public class Direccion{
 
 	public String getBloque() {
 		return bloque;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public void setBloque(String bloque) {
@@ -115,15 +128,14 @@ public class Direccion{
 	public void setLocalidad(Localidad localidad) {
 		this.localidad = localidad;
 	}
-	
+
 // ===============================================================
 
 	@Override
 	public String toString() {
 		return "Direccion [id=" + id + ", calle=" + calle + ", numero=" + numero + ", bloque=" + bloque + ", escalera="
 				+ escalera + ", piso=" + piso + ", puerta=" + puerta + ", codigoPostal=" + codigoPostal + ", localidad="
-				+ localidad + "]";
+				+ localidad + ", usuario=" + usuario + "]";
 	}
-	
 
 }
