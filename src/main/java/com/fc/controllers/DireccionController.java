@@ -28,13 +28,13 @@ public class DireccionController {
     private DireccionRepository direccionRepository;
 
  // LISTAR
- 	@GetMapping("/direcciones")
+ 	@GetMapping("/direccion")
  	public List<Direccion> getAllDirecciones() {
  		return direccionRepository.findAll();
  	}
 
  	// RECUPERAR POR ID
- 	@GetMapping("/direcciones/{id}")
+ 	@GetMapping("/direccion/{id}")
  	public ResponseEntity<Direccion> getDireccionById(@PathVariable(value = "id") Long direccionId)
  			throws ResourceNotFoundException {
  		Direccion direccion = direccionRepository.findById(direccionId)
@@ -43,13 +43,13 @@ public class DireccionController {
  	}
 
  	// CREAR
- 	@PostMapping("/direcciones")
+ 	@PostMapping("/direccion")
  	public Direccion createDireccion(@Valid @RequestBody Direccion direccion) {
  		return direccionRepository.save(direccion);
  	}
 
  	// ACTUALIZAR
- 	@PutMapping("/direcciones/{id}")
+ 	@PutMapping("/direccion/{id}")
  	public ResponseEntity<Direccion> updateDireccion(@PathVariable(value = "id") Long direccionId,
  			@Valid @RequestBody Direccion direccionDetails) throws ResourceNotFoundException {
 
@@ -69,7 +69,7 @@ public class DireccionController {
   	  }
   	
   	// BORRAR
-  	@DeleteMapping("/direcciones/{id}")
+  	@DeleteMapping("/direccion/{id}")
   	  public Map<String, Boolean> deleteDireccion(@PathVariable(value = "id") Long direccionId) throws Exception {
   	    Direccion direccion =
   	        direccionRepository

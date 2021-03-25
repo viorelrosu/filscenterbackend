@@ -1,9 +1,7 @@
 package com.fc.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
+import javax.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -47,7 +45,7 @@ public class Direccion {
 
 //===============================================================
 
-// ===================GETTERS Y SETTERS===========================
+//===================GETTERS Y SETTERS===========================
 
 	public Long getId() {
 		return id;

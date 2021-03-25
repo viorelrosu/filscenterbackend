@@ -44,7 +44,7 @@ class DireccionTest {
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
-		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/direcciones", HttpMethod.GET, entity,
+		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/direccion", HttpMethod.GET, entity,
 				String.class);
 
 		Assert.assertNotNull(response.getBody());
@@ -53,7 +53,7 @@ class DireccionTest {
 	// RECUPERAR POR ID
 	@Test
 	public void testGetDireccionById() {
-		Direccion direccion = restTemplate.getForObject(getRootUrl() + "/direcciones/1", Direccion.class);
+		Direccion direccion = restTemplate.getForObject(getRootUrl() + "/direccion/1", Direccion.class);
 		System.out.println(direccion);
 		Assert.assertNotNull(direccion);
 	}
@@ -71,7 +71,7 @@ class DireccionTest {
  		direccion.setCodigoPostal(28856);
  		direccion.setLocalidad(new Localidad("Murcia",new Provincia("Orense")));
 
-		ResponseEntity<Direccion> postResponse = restTemplate.postForEntity(getRootUrl() + "/direcciones", direccion,
+		ResponseEntity<Direccion> postResponse = restTemplate.postForEntity(getRootUrl() + "/direccion", direccion,
 				Direccion.class);
 		Assert.assertNotNull(postResponse);
 		Assert.assertNotNull(postResponse.getBody());
@@ -81,7 +81,7 @@ class DireccionTest {
 	@Test
 	public void testUpdateDireccion() {
 		int id = 1;
-		Direccion direccion = restTemplate.getForObject(getRootUrl() + "/direcciones/" + id, Direccion.class);
+		Direccion direccion = restTemplate.getForObject(getRootUrl() + "/direccion/" + id, Direccion.class);
 		direccion.setCalle("Pintora Romera");
 		direccion.setNumero(3);
  		direccion.setBloque("B");
@@ -91,9 +91,9 @@ class DireccionTest {
  		direccion.setCodigoPostal(28756);
  		direccion.setLocalidad(new Localidad("Velilla",new Provincia("Manchester")));
 
-		restTemplate.put(getRootUrl() + "/direcciones/" + id, direccion);
+		restTemplate.put(getRootUrl() + "/direccion/" + id, direccion);
 
-		Direccion updatedProvincia = restTemplate.getForObject(getRootUrl() + "/direcciones/" + id, Direccion.class);
+		Direccion updatedProvincia = restTemplate.getForObject(getRootUrl() + "/direccion/" + id, Direccion.class);
 		Assert.assertNotNull(updatedProvincia);
 	}
 
@@ -101,13 +101,13 @@ class DireccionTest {
 	@Test
 	public void testDeleteDireccion() {
 		int id = 2;
-		Direccion direccion = restTemplate.getForObject(getRootUrl() + "/direcciones/" + id, Direccion.class);
+		Direccion direccion = restTemplate.getForObject(getRootUrl() + "/direccion/" + id, Direccion.class);
 		Assert.assertNotNull(direccion);
 
-		restTemplate.delete(getRootUrl() + "/direcciones/" + id);
+		restTemplate.delete(getRootUrl() + "/direccion/" + id);
 
 		try {
-			direccion = restTemplate.getForObject(getRootUrl() + "/direcciones/" + id, Direccion.class);
+			direccion = restTemplate.getForObject(getRootUrl() + "/direccion/" + id, Direccion.class);
 		} catch (final HttpClientErrorException e) {
 			Assert.assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
 		}
