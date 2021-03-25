@@ -14,6 +14,7 @@ public class Usuario {
 	private Long id;
 
 	@NotEmpty
+	@Column(unique=true)
 	private String nombreUsuario;
 
 	@NotEmpty
@@ -26,6 +27,7 @@ public class Usuario {
 	private String apellidos;
 
 	@NotEmpty
+	@Column(unique=true)
 	private String dni;
 
 	@NotEmpty

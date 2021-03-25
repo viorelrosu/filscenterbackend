@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/webservice")
-public class LocalidadController {
+public class LocalidadRESTController {
 
     @Autowired
     private LocalidadRepository localidadRepository;
     
 	// LISTAR
-	@GetMapping("/localidades")
+	@GetMapping("/localidad")
 	public List<Localidad> getAllLocalidades() {
 		return localidadRepository.findAll();
 	}
 
 	// RECUPERAR POR ID
-	@GetMapping("/localidades/{id}")
+	@GetMapping("/localidad/{id}")
 	public ResponseEntity<Localidad> getLocalidadById(@PathVariable(value = "id") Long localidadId)
 			throws ResourceNotFoundException {
 		Localidad localidad = localidadRepository.findById(localidadId)
@@ -37,13 +37,13 @@ public class LocalidadController {
 	}
 
 	// CREAR
-	@PostMapping("/localidades")
+	@PostMapping("/localidad")
 	public Localidad createLocalidad(@Valid @RequestBody Localidad localidad) {
 		return localidadRepository.save(localidad);
 	}
 
 	// ACTUALIZAR
-	@PutMapping("/localidades/{id}")
+	@PutMapping("/localidad/{id}")
 	public ResponseEntity<Localidad> updateLocalidad(@PathVariable(value = "id") Long localidadId,
 			@Valid @RequestBody Localidad localidadDetails) throws ResourceNotFoundException {
 
@@ -57,7 +57,7 @@ public class LocalidadController {
  	  }
  	
  	// BORRAR
- 	@DeleteMapping("/localidades/{id}")
+ 	@DeleteMapping("/localidad/{id}")
  	  public Map<String, Boolean> deleteLocalidad(@PathVariable(value = "id") Long localidadId) throws Exception {
  	    Localidad localidad =
  	        localidadRepository

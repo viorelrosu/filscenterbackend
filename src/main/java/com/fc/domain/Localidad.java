@@ -1,9 +1,8 @@
 package com.fc.domain;
 
 import java.util.Collection;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

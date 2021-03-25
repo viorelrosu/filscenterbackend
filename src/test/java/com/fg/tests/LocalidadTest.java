@@ -40,7 +40,7 @@ public class LocalidadTest {
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
-		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/localidades", HttpMethod.GET, entity,
+		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/localidad", HttpMethod.GET, entity,
 				String.class);
 
 		Assert.assertNotNull(response.getBody());
@@ -49,7 +49,7 @@ public class LocalidadTest {
 	// RECUPERAR POR ID
 	@Test
 	public void testGetLocalidadById() {
-		Localidad localidad = restTemplate.getForObject(getRootUrl() + "/localidades/1", Localidad.class);
+		Localidad localidad = restTemplate.getForObject(getRootUrl() + "/localidad/1", Localidad.class);
 		System.out.println(localidad.getNombre());
 		Assert.assertNotNull(localidad);
 	}
@@ -61,7 +61,7 @@ public class LocalidadTest {
 		localidad.setNombre("Valencia");
 		localidad.setProvincia(new Provincia("Malaga"));
 
-		ResponseEntity<Localidad> postResponse = restTemplate.postForEntity(getRootUrl() + "/localidades", localidad,
+		ResponseEntity<Localidad> postResponse = restTemplate.postForEntity(getRootUrl() + "/localidad", localidad,
 				Localidad.class);
 		Assert.assertNotNull(postResponse);
 		Assert.assertNotNull(postResponse.getBody());
@@ -71,13 +71,13 @@ public class LocalidadTest {
 	@Test
 	public void testUpdateLocalidad() {
 		int id = 1;
-		Localidad localidad = restTemplate.getForObject(getRootUrl() + "/localidades/" + id, Localidad.class);
+		Localidad localidad = restTemplate.getForObject(getRootUrl() + "/localidad/" + id, Localidad.class);
 		localidad.setNombre("Barcelona");
 		localidad.setProvincia(new Provincia("Lugo"));
 
-		restTemplate.put(getRootUrl() + "/localidades/" + id, localidad);
+		restTemplate.put(getRootUrl() + "/localidad/" + id, localidad);
 
-		Localidad updatedProvincia = restTemplate.getForObject(getRootUrl() + "/localidades/" + id, Localidad.class);
+		Localidad updatedProvincia = restTemplate.getForObject(getRootUrl() + "/localidad/" + id, Localidad.class);
 		Assert.assertNotNull(updatedProvincia);
 	}
 
@@ -85,13 +85,13 @@ public class LocalidadTest {
 	@Test
 	public void testDeleteLocalidad() {
 		int id = 2;
-		Localidad localidad = restTemplate.getForObject(getRootUrl() + "/localidades/" + id, Localidad.class);
+		Localidad localidad = restTemplate.getForObject(getRootUrl() + "/localidad/" + id, Localidad.class);
 		Assert.assertNotNull(localidad);
 
-		restTemplate.delete(getRootUrl() + "/localidades/" + id);
+		restTemplate.delete(getRootUrl() + "/localidad/" + id);
 
 		try {
-			localidad = restTemplate.getForObject(getRootUrl() + "/localidades/" + id, Localidad.class);
+			localidad = restTemplate.getForObject(getRootUrl() + "/localidad/" + id, Localidad.class);
 		} catch (final HttpClientErrorException e) {
 			Assert.assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
 		}

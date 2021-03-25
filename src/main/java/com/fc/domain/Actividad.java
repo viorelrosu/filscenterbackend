@@ -1,17 +1,8 @@
 package com.fc.domain;
 
 import java.util.Collection;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-
+import javax.persistence.*;
+import javax.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -19,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Actividad {
 
 	// ===================VARIABLES===================================
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -41,9 +33,11 @@ public class Actividad {
 	@JsonIgnore
 	@OneToMany(mappedBy = "actividad", fetch = FetchType.EAGER)
 	private Collection<ClaseProgramada> clasesProgramadas;
+	
 	// ===============================================================
 
 	// ===================GETTERS Y SETTERS===========================
+	
 	public Long getId() {
 		return id;
 	}

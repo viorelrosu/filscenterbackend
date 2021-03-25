@@ -16,20 +16,20 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/webservice")
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
-public class ProvinciaController {
+public class ProvinciaRESTController {
 
 	@Autowired
 	private ProvinciaRepository provinciaRepository;
 
 	// LISTAR
-	@GetMapping("/provincias")
+	@GetMapping("/provincia")
 	public List<Provincia> getAllProvincias() {
 		System.out.println(provinciaRepository.findAll());
 		return provinciaRepository.findAll();
 	}
 
 	// RECUPERAR POR ID
-	@GetMapping("/provincias/{id}")
+	@GetMapping("/provincia/{id}")
 	public ResponseEntity<Provincia> getProvinciaById(@PathVariable(value = "id") Long provinciaId)
 			throws ResourceNotFoundException {
 		Provincia provincia = provinciaRepository.findById(provinciaId)
@@ -38,13 +38,13 @@ public class ProvinciaController {
 	}
 
 	// CREAR
-	@PostMapping("/provincias")
+	@PostMapping("/provincia")
 	public Provincia createProvincia(@Valid @RequestBody Provincia provincia) {
 		return provinciaRepository.save(provincia);
 	}
 
 	// ACTUALIZAR
-	@PutMapping("/provincias/{id}")
+	@PutMapping("/provincia/{id}")
 	  public ResponseEntity<Provincia> updateProvincia(
 	      @PathVariable(value = "id") Long provinciaId, @Valid @RequestBody Provincia provinciaDetails)
 	      throws ResourceNotFoundException {
@@ -60,7 +60,7 @@ public class ProvinciaController {
 	  }
 	
 	// BORRAR
-	@DeleteMapping("/provincias/{id}")
+	@DeleteMapping("/provincia/{id}")
 	  public Map<String, Boolean> deleteProvincia(@PathVariable(value = "id") Long provinciaId) throws Exception {
 	    Provincia provincia =
 	        provinciaRepository
