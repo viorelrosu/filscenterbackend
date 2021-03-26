@@ -6,8 +6,8 @@ import javax.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "clase_programada")
-public class ClaseProgramada {
+@Table(name = "slot")
+public class Slot {
 	
 	// ===================VARIABLES===================================
 
@@ -16,7 +16,7 @@ public class ClaseProgramada {
 	private Long id;
 
 	@NotEmpty
-	private String dia;
+	private String diaSemana;
 
 	@NotEmpty
 	private Integer horaInicio;
@@ -29,9 +29,12 @@ public class ClaseProgramada {
 
 	@ManyToOne
 	private Actividad actividad;
+	
+	@ManyToOne
+	private Usuario monitor;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "claseProgramada", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "slot", fetch = FetchType.EAGER)
 	private Collection<Reserva> reservas;
 
 	// ===============================================================
@@ -44,14 +47,6 @@ public class ClaseProgramada {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getDia() {
-		return dia;
-	}
-
-	public void setDia(String dia) {
-		this.dia = dia;
 	}
 
 	public Integer getHoraInicio() {
@@ -93,12 +88,28 @@ public class ClaseProgramada {
 	public void setReservas(Collection<Reserva> reservas) {
 		this.reservas = reservas;
 	}
+	
+	public String getDiaSemana() {
+		return diaSemana;
+	}
+
+	public void setDiaSemana(String diaSemana) {
+		this.diaSemana = diaSemana;
+	}
+
+	public Usuario getMonitor() {
+		return monitor;
+	}
+
+	public void setMonitor(Usuario monitor) {
+		this.monitor = monitor;
+	}
 
 	// ===============================================================
 
 	@Override
 	public String toString() {
-		return "ClaseProgramada [id=" + id + ", dia=" + dia + ", horaInicio=" + horaInicio + ", aforoActual="
+		return "ClaseProgramada [id=" + id + ", diaSemana=" + diaSemana + ", horaInicio=" + horaInicio + ", aforoActual="
 				+ aforoActual + ", sala=" + sala + ", actividad=" + actividad + ", reservas=" + reservas + "]";
 	}
 

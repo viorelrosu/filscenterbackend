@@ -67,7 +67,7 @@ public class Usuario {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "monitor")
-	private Collection<Actividad> actividades;
+	private Collection<Slot> slot;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "usuario")
@@ -221,12 +221,13 @@ public class Usuario {
 		this.facturas = facturas;
 	}
 
-	public Collection<Actividad> getActividades() {
-		return actividades;
+
+	public Collection<Slot> getSlot() {
+		return slot;
 	}
 
-	public void setActividades(Collection<Actividad> actividades) {
-		this.actividades = actividades;
+	public void setSlot(Collection<Slot> slot) {
+		this.slot = slot;
 	}
 
 	public Collection<Reserva> getReservas() {
@@ -261,8 +262,8 @@ public class Usuario {
 				+ nombre + ", apellidos=" + apellidos + ", dni=" + dni + ", email=" + email + ", telefono=" + telefono
 				+ ", fechaNacimiento=" + fechaNacimiento + ", cuentaBancaria=" + cuentaBancaria + ", numeroTarjeta="
 				+ numeroTarjeta + ", biografia=" + biografia + ", rol=" + rol + ", suscripcion=" + suscripcion
-				+ ", taquilla=" + taquilla + ", direccion=" + direccion + ", facturas=" + facturas + ", actividades="
-				+ actividades + ", reservas=" + reservas + ", tablasEjercicioSuscriptor=" + tablasEjercicioSuscriptor
+				+ ", taquilla=" + taquilla + ", direccion=" + direccion + ", facturas=" + facturas + ", slot=" + slot
+				+ ", reservas=" + reservas + ", tablasEjercicioSuscriptor=" + tablasEjercicioSuscriptor
 				+ ", tablasEjercicioMonitor=" + tablasEjercicioMonitor + "]";
 	}
 

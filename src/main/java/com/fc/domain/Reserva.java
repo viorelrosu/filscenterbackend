@@ -16,15 +16,15 @@ public class Reserva {
 	private Boolean recurrente;
 
 	@ManyToOne
-	private ClaseProgramada claseProgramada;
-
-	@ManyToOne
 	private Usuario usuario;
+	
+	@ManyToOne
+	private Slot slot;
 	
 	// ===============================================================
 
 	// ===================GETTERS Y SETTERS===========================
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -41,14 +41,6 @@ public class Reserva {
 		this.recurrente = recurrente;
 	}
 
-	public ClaseProgramada getClaseProgramada() {
-		return claseProgramada;
-	}
-
-	public void setClaseProgramada(ClaseProgramada claseProgramada) {
-		this.claseProgramada = claseProgramada;
-	}
-
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -57,12 +49,19 @@ public class Reserva {
 		this.usuario = usuario;
 	}
 	
+	public Slot getSlot() {
+		return slot;
+	}
+
+	public void setSlot(Slot slot) {
+		this.slot = slot;
+	}
+	
 	// ===============================================================
 
 	@Override
 	public String toString() {
-		return "Reserva [id=" + id + ", recurrente=" + recurrente + ", claseProgramada=" + claseProgramada
-				+ ", usuario=" + usuario + "]";
+		return "Reserva [id=" + id + ", recurrente=" + recurrente + ", usuario=" + usuario + ", slot=" + slot + "]";
 	}
 
 }

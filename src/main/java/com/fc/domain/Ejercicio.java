@@ -19,6 +19,9 @@ public class Ejercicio {
 	@NotEmpty
 	private String nombre;
 	
+	@ManyToOne
+	private TipoEjercicio tipoEjercicio;
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "ejercicio", fetch = FetchType.EAGER)
 	private Collection<EjercicioSerie> ejercicioSeries;
@@ -38,6 +41,14 @@ public class Ejercicio {
 	public String getNombre() {
 		return nombre;
 	}
+	
+	public TipoEjercicio getTipoEjercicio() {
+		return tipoEjercicio;
+	}
+
+	public void setTipoEjercicio(TipoEjercicio tipoEjercicio) {
+		this.tipoEjercicio = tipoEjercicio;
+	}
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
@@ -55,7 +66,8 @@ public class Ejercicio {
 
 	@Override
 	public String toString() {
-		return "Ejercicio [id=" + id + ", nombre=" + nombre + ", ejercicioSeries=" + ejercicioSeries + "]";
+		return "Ejercicio [id=" + id + ", nombre=" + nombre + ", tipoEjercicio=" + tipoEjercicio + ", ejercicioSeries="
+				+ ejercicioSeries + "]";
 	}
 	
 

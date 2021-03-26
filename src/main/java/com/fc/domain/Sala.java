@@ -23,7 +23,7 @@ public class Sala {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "sala", fetch = FetchType.EAGER)
-	private Collection<ClaseProgramada> clasesProgramadas;
+	private Collection<Slot> slots;
 	// ===============================================================
 	
 	// ===================GETTERS Y SETTERS===========================
@@ -52,20 +52,20 @@ public class Sala {
 		this.aforoMax = aforoMax;
 	}
 
-	public Collection<ClaseProgramada> getClasesProgramadas() {
-		return clasesProgramadas;
+	public Collection<Slot> getSlots() {
+		return slots;
 	}
 
-	public void setClasesProgramadas(Collection<ClaseProgramada> clasesProgramadas) {
-		this.clasesProgramadas = clasesProgramadas;
+	public void setSlots(Collection<Slot> slots) {
+		this.slots = slots;
 	}
 	
 	// ===============================================================
 
 	@Override
 	public String toString() {
-		return "Sala [id=" + id + ", numero=" + numero + ", aforoMax=" + aforoMax + ", clasesProgramadas="
-				+ clasesProgramadas + "]";
+		return "Sala [id=" + id + ", numero=" + numero + ", aforoMax=" + aforoMax + ", slots="
+				+ slots + "]";
 	}
 	
 

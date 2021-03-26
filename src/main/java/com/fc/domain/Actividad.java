@@ -27,12 +27,9 @@ public class Actividad {
 	@ManyToOne
 	private TipoActividad tipoActividad;
 
-	@ManyToOne
-	private Usuario monitor;
-
 	@JsonIgnore
 	@OneToMany(mappedBy = "actividad", fetch = FetchType.EAGER)
-	private Collection<ClaseProgramada> clasesProgramadas;
+	private Collection<Slot> slots;
 	
 	// ===============================================================
 
@@ -78,29 +75,21 @@ public class Actividad {
 		this.tipoActividad = tipoActividad;
 	}
 
-	public Usuario getMonitor() {
-		return monitor;
+	public Collection<Slot> getSlots() {
+		return slots;
 	}
 
-	public void setMonitor(Usuario monitor) {
-		this.monitor = monitor;
-	}
-
-	public Collection<ClaseProgramada> getClasesProgramadas() {
-		return clasesProgramadas;
-	}
-
-	public void setClasesProgramadas(Collection<ClaseProgramada> clasesProgramadas) {
-		this.clasesProgramadas = clasesProgramadas;
+	public void setSlots(Collection<Slot> slots) {
+		this.slots = slots;
 	}
 
 	// ===============================================================
 
+
 	@Override
 	public String toString() {
 		return "Actividad [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", dificultad="
-				+ dificultad + ", tipoActividad=" + tipoActividad + ", monitor=" + monitor + ", clasesProgramadas="
-				+ clasesProgramadas + "]";
+				+ dificultad + ", tipoActividad=" + tipoActividad + ", slots=" + slots + "]";
 	}
 
 }
