@@ -1,4 +1,4 @@
-package com.fc.controllers;
+package com.fc.controllers.rest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,42 +14,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fc.domain.Usuario;
+import com.fc.domain.Actividad;
 import com.fc.exceptions.ResourceNotFoundException;
-import com.fc.repositories.UsuarioRepository;
+import com.fc.repositories.ActividadRepository;
 
 @RestController
 @RequestMapping("/webservice")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
 		RequestMethod.DELETE })
-public class UsuarioRESTController {
+public class ActividadRESTController {
 
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private ActividadRepository actividadRepository;
 
 	// LISTAR
-	@GetMapping("/usuario")
-	public List<Usuario> getAllUsuarios() {
-		System.out.println(usuarioRepository.findAll());
-		return usuarioRepository.findAll();
+	@GetMapping("/actividad")
+	public List<Actividad> getAllActividades() {
+		return actividadRepository.findAll();
 	}
 
 	// RECUPERAR POR ID
-	@GetMapping("/usuario/{id}")
-	public ResponseEntity<Usuario> getUsuarioById(@PathVariable(value = "id") Long usuarioId)
+	@GetMapping("/actividad/{id}")
+	public ResponseEntity<Actividad> getActividadById(@PathVariable(value = "id") Long actividadId)
 			throws ResourceNotFoundException {
-		Usuario usuario = usuarioRepository.findById(usuarioId)
-				.orElseThrow(() -> new ResourceNotFoundException("Usuario not found on :: " + usuarioId));
-		return ResponseEntity.ok().body(usuario);
+		Actividad actividad = actividadRepository.findById(actividadId)
+				.orElseThrow(() -> new ResourceNotFoundException("Actividad not found on :: " + actividadId));
+		return ResponseEntity.ok().body(actividad);
 	}
 
 	// BORRAR
-	@DeleteMapping("/usuario/{id}")
-	public Map<String, Boolean> deleteUsuario(@PathVariable(value = "id") Long usuarioId) throws Exception {
-		Usuario usuario = usuarioRepository.findById(usuarioId)
-				.orElseThrow(() -> new ResourceNotFoundException("Usuario not found on :: " + usuarioId));
+	@DeleteMapping("/actividad/{id}")
+	public Map<String, Boolean> deleteActividad(@PathVariable(value = "id") Long actividadId) throws Exception {
+		Actividad actividad = actividadRepository.findById(actividadId)
+				.orElseThrow(() -> new ResourceNotFoundException("Actividad not found on :: " + actividadId));
 
-		usuarioRepository.delete(usuario);
+		actividadRepository.delete(actividad);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;

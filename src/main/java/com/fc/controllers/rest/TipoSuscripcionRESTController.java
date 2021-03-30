@@ -1,4 +1,4 @@
-package com.fc.controllers;
+package com.fc.controllers.rest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +30,6 @@ public class TipoSuscripcionRESTController {
 	// LISTAR
 	@GetMapping("/tipoSuscripcion")
 	public List<TipoSuscripcion> getAllTiposSuscripciones() {
-		System.out.println(tipoSuscripcionRepository.findAll());
 		return tipoSuscripcionRepository.findAll();
 	}
 

@@ -57,8 +57,8 @@ public class Usuario {
 	@ManyToOne
 	private Taquilla taquilla;
 
-	@OneToOne
-	@JoinColumn(name = "direccion_id")
+	@JsonIgnore
+	@OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
 	private Direccion direccion;
 
 	@JsonIgnore

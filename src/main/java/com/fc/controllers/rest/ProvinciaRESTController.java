@@ -1,4 +1,4 @@
-package com.fc.controllers;
+package com.fc.controllers.rest;
 
 import com.fc.domain.Provincia;
 import com.fc.exceptions.ResourceNotFoundException;
@@ -24,7 +24,6 @@ public class ProvinciaRESTController {
 	// LISTAR
 	@GetMapping("/provincia")
 	public List<Provincia> getAllProvincias() {
-		System.out.println(provinciaRepository.findAll());
 		return provinciaRepository.findAll();
 	}
 

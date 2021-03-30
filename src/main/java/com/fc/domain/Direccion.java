@@ -39,8 +39,9 @@ public class Direccion {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Localidad localidad;
 
+	@OneToOne
 	@JsonIgnore
-	@OneToOne(mappedBy = "direccion", cascade = CascadeType.ALL)
+	@JoinColumn(name = "usuario_id")
 	private Usuario usuario;
 
 //===============================================================

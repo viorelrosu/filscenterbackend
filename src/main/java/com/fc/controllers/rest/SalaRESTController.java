@@ -1,4 +1,4 @@
-package com.fc.controllers;
+package com.fc.controllers.rest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +30,6 @@ public class SalaRESTController {
 	// LISTAR
 	@GetMapping("/sala")
 	public List<Sala> getAllSalas() {
-		System.out.println(salaRepository.findAll());
 		return salaRepository.findAll();
 	}
 

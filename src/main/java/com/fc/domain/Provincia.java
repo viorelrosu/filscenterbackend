@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "provincia")
-public class Provincia {
+public class Provincia{
 
 //===================VARIABLES===================================
 

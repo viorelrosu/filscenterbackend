@@ -1,4 +1,4 @@
-package com.fc.controllers;
+package com.fc.controllers.rest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,42 +14,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fc.domain.Taquilla;
+import com.fc.domain.Reserva;
 import com.fc.exceptions.ResourceNotFoundException;
-import com.fc.repositories.TaquillaRepository;
+import com.fc.repositories.ReservaRepository;
 
 @RestController
 @RequestMapping("/webservice")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
 		RequestMethod.DELETE })
-public class TaquillaRESTController {
+public class ReservaRESTController {
 
 	@Autowired
-	private TaquillaRepository taquillaRepository;
+	private ReservaRepository reservaRepository;
 
 	// LISTAR
-	@GetMapping("/taquilla")
-	public List<Taquilla> getAllTaquillas() {
-		System.out.println(taquillaRepository.findAll());
-		return taquillaRepository.findAll();
+	@GetMapping("/reserva")
+	public List<Reserva> getAllReservas() {
+		return reservaRepository.findAll();
 	}
 
 	// RECUPERAR POR ID
-	@GetMapping("/taquilla/{id}")
-	public ResponseEntity<Taquilla> getTaquillaById(@PathVariable(value = "id") Long taquillaId)
+	@GetMapping("/reserva/{id}")
+	public ResponseEntity<Reserva> getReservaById(@PathVariable(value = "id") Long reservaId)
 			throws ResourceNotFoundException {
-		Taquilla taquilla = taquillaRepository.findById(taquillaId)
-				.orElseThrow(() -> new ResourceNotFoundException("Taquilla not found on :: " + taquillaId));
-		return ResponseEntity.ok().body(taquilla);
+		Reserva reserva = reservaRepository.findById(reservaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Reserva not found on :: " + reservaId));
+		return ResponseEntity.ok().body(reserva);
 	}
 
 	// BORRAR
-	@DeleteMapping("/taquilla/{id}")
-	public Map<String, Boolean> deleteTaquilla(@PathVariable(value = "id") Long taquillaId) throws Exception {
-		Taquilla taquilla = taquillaRepository.findById(taquillaId)
-				.orElseThrow(() -> new ResourceNotFoundException("Taquilla not found on :: " + taquillaId));
+	@DeleteMapping("/reserva/{id}")
+	public Map<String, Boolean> deleteReserva(@PathVariable(value = "id") Long reservaId) throws Exception {
+		Reserva reserva = reservaRepository.findById(reservaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Reserva not found on :: " + reservaId));
 
-		taquillaRepository.delete(taquilla);
+		reservaRepository.delete(reserva);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;

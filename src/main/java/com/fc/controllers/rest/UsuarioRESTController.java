@@ -1,4 +1,4 @@
-package com.fc.controllers;
+package com.fc.controllers.rest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,42 +14,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fc.domain.Rol;
+import com.fc.domain.Usuario;
 import com.fc.exceptions.ResourceNotFoundException;
-import com.fc.repositories.RolRepository;
+import com.fc.repositories.UsuarioRepository;
 
 @RestController
 @RequestMapping("/webservice")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
 		RequestMethod.DELETE })
-public class RolRESTController {
+public class UsuarioRESTController {
 
 	@Autowired
-	private RolRepository rolRepository;
+	private UsuarioRepository usuarioRepository;
 
 	// LISTAR
-	@GetMapping("/rol")
-	public List<Rol> getAllRoles() {
-		System.out.println(rolRepository.findAll());
-		return rolRepository.findAll();
+	@GetMapping("/usuario")
+	public List<Usuario> getAllUsuarios() {
+		return usuarioRepository.findAll();
 	}
 
 	// RECUPERAR POR ID
-	@GetMapping("/rol/{id}")
-	public ResponseEntity<Rol> getRolById(@PathVariable(value = "id") Long rolId)
+	@GetMapping("/usuario/{id}")
+	public ResponseEntity<Usuario> getUsuarioById(@PathVariable(value = "id") Long usuarioId)
 			throws ResourceNotFoundException {
-		Rol rol = rolRepository.findById(rolId)
-				.orElseThrow(() -> new ResourceNotFoundException("Rol not found on :: " + rolId));
-		return ResponseEntity.ok().body(rol);
+		Usuario usuario = usuarioRepository.findById(usuarioId)
+				.orElseThrow(() -> new ResourceNotFoundException("Usuario not found on :: " + usuarioId));
+		return ResponseEntity.ok().body(usuario);
 	}
 
 	// BORRAR
-	@DeleteMapping("/rol/{id}")
-	public Map<String, Boolean> deleteRol(@PathVariable(value = "id") Long rolId) throws Exception {
-		Rol rol = rolRepository.findById(rolId)
-				.orElseThrow(() -> new ResourceNotFoundException("Rol not found on :: " + rolId));
+	@DeleteMapping("/usuario/{id}")
+	public Map<String, Boolean> deleteUsuario(@PathVariable(value = "id") Long usuarioId) throws Exception {
+		Usuario usuario = usuarioRepository.findById(usuarioId)
+				.orElseThrow(() -> new ResourceNotFoundException("Usuario not found on :: " + usuarioId));
 
-		rolRepository.delete(rol);
+		usuarioRepository.delete(usuario);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;

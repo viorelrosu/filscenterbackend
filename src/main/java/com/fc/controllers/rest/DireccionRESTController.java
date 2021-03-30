@@ -1,4 +1,4 @@
-package com.fc.controllers;
+package com.fc.controllers.rest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,14 +18,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fc.domain.Direccion;
+import com.fc.domain.Localidad;
+import com.fc.domain.Provincia;
 import com.fc.exceptions.ResourceNotFoundException;
 import com.fc.repositories.DireccionRepository;
+import com.fc.repositories.LocalidadRepository;
+import com.fc.repositories.ProvinciaRepository;
 
 @RestController
 @RequestMapping("/webservice")
 public class DireccionRESTController {
     @Autowired
     private DireccionRepository direccionRepository;
+    @Autowired
+    private LocalidadRepository localidadRepository;
+    @Autowired
+    private ProvinciaRepository provinciaRepository;
 
  // LISTAR
  	@GetMapping("/direccion")
@@ -45,6 +53,16 @@ public class DireccionRESTController {
  	// CREAR
  	@PostMapping("/direccion")
  	public Direccion createDireccion(@Valid @RequestBody Direccion direccion) {
+		Localidad localidad = localidadRepository.findOneByNombreAndProvinciaId(direccion.getLocalidad().getNombre(), direccion.getLocalidad().getProvincia().getId());
+		if(localidad == null) {
+			localidad = new Localidad();
+			localidad.setNombre(direccion.getLocalidad().getNombre());
+			Provincia provincia = provinciaRepository.findById(direccion.getLocalidad().getProvincia().getId()).get();
+			localidad.setProvincia(provincia);
+			provincia.getLocalidades().add(localidad);
+			localidad = localidadRepository.save(localidad);
+		}
+		direccion.setLocalidad(localidad);
  		return direccionRepository.save(direccion);
  	}
 
@@ -63,7 +81,16 @@ public class DireccionRESTController {
  		direccion.setPiso(direccionDetails.getPiso());
  		direccion.setPuerta(direccionDetails.getPuerta());
  		direccion.setCodigoPostal(direccionDetails.getCodigoPostal());
- 		direccion.setLocalidad(direccionDetails.getLocalidad());
+ 		Localidad localidad = localidadRepository.findOneByNombreAndProvinciaId(direccionDetails.getLocalidad().getNombre(), direccionDetails.getLocalidad().getProvincia().getId());
+		if(localidad == null) {
+			localidad = new Localidad();
+			localidad.setNombre(direccion.getLocalidad().getNombre());
+			Provincia provincia = provinciaRepository.findById(direccion.getLocalidad().getProvincia().getId()).get();
+			localidad.setProvincia(provincia);
+			provincia.getLocalidades().add(localidad);
+			localidad = localidadRepository.save(localidad);
+		}
+ 		direccion.setLocalidad(localidad);
  		final Direccion updatedDireccion = direccionRepository.save(direccion);
   	    return ResponseEntity.ok(updatedDireccion);
   	  }

@@ -1,4 +1,4 @@
-package com.fc.controllers;
+package com.fc.controllers.rest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,42 +14,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fc.domain.Actividad;
+import com.fc.domain.Slot;
 import com.fc.exceptions.ResourceNotFoundException;
-import com.fc.repositories.ActividadRepository;
+import com.fc.repositories.SlotRepository;
 
 @RestController
 @RequestMapping("/webservice")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
 		RequestMethod.DELETE })
-public class ActividadRESTController {
+public class SlotRESTController {
 
 	@Autowired
-	private ActividadRepository actividadRepository;
+	private SlotRepository slotRepository;
 
 	// LISTAR
-	@GetMapping("/actividad")
-	public List<Actividad> getAllActividades() {
-		System.out.println(actividadRepository.findAll());
-		return actividadRepository.findAll();
+	@GetMapping("/slot")
+	public List<Slot> getAllSlots() {
+		return slotRepository.findAll();
 	}
 
 	// RECUPERAR POR ID
-	@GetMapping("/actividad/{id}")
-	public ResponseEntity<Actividad> getActividadById(@PathVariable(value = "id") Long actividadId)
+	@GetMapping("/slot/{id}")
+	public ResponseEntity<Slot> getSlotById(@PathVariable(value = "id") Long slotId)
 			throws ResourceNotFoundException {
-		Actividad actividad = actividadRepository.findById(actividadId)
-				.orElseThrow(() -> new ResourceNotFoundException("Actividad not found on :: " + actividadId));
-		return ResponseEntity.ok().body(actividad);
+		Slot slot = slotRepository.findById(slotId)
+				.orElseThrow(() -> new ResourceNotFoundException("Slot not found on :: " + slotId));
+		return ResponseEntity.ok().body(slot);
 	}
 
 	// BORRAR
-	@DeleteMapping("/actividad/{id}")
-	public Map<String, Boolean> deleteActividad(@PathVariable(value = "id") Long actividadId) throws Exception {
-		Actividad actividad = actividadRepository.findById(actividadId)
-				.orElseThrow(() -> new ResourceNotFoundException("Actividad not found on :: " + actividadId));
+	@DeleteMapping("/slot/{id}")
+	public Map<String, Boolean> deleteSlot(@PathVariable(value = "id") Long slotId) throws Exception {
+		Slot slot = slotRepository.findById(slotId)
+				.orElseThrow(() -> new ResourceNotFoundException("Slot not found on :: " + slotId));
 
-		actividadRepository.delete(actividad);
+		slotRepository.delete(slot);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
