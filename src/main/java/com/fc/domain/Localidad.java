@@ -64,11 +64,23 @@ public class Localidad{
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	
+	public Collection<Direccion> getDirecciones() {
+		return direcciones;
+	}
+
+	public void setDirecciones(Collection<Direccion> direcciones) {
+		this.direcciones = direcciones;
+	}
+	
 //===============================================================
+
+	
 
 	@Override
 	public String toString() {
-		return "Localidad [id=" + id + ", nombre=" + nombre + "]";
+		return "Localidad [id=" + id + ", nombre=" + nombre + ", provincia=" + provincia + ", direcciones="
+				+ direcciones + "]";
 	}
 
 }
