@@ -15,10 +15,10 @@ public class Reserva {
 	@NotNull
 	private Boolean recurrente;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Usuario usuario;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Slot slot;
 	
 	// ===============================================================

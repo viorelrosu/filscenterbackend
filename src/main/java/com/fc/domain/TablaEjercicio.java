@@ -30,10 +30,10 @@ public class TablaEjercicio {
 	@OneToMany(mappedBy = "tablaEjercicio", fetch = FetchType.EAGER)
 	private Collection<EjercicioSerie> ejercicioSeries;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Usuario monitor;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Usuario suscriptor;
 
 	// ===============================================================

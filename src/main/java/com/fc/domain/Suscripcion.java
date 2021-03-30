@@ -23,7 +23,7 @@ public class Suscripcion {
 	@Column(nullable=true)
 	private Date fechaBaja;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private TipoSuscripcion tipoSuscripcion;
 	
 	@JsonIgnore

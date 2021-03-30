@@ -19,7 +19,7 @@ public class Ejercicio {
 	@NotEmpty
 	private String nombre;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private TipoEjercicio tipoEjercicio;
 
 	@JsonIgnore

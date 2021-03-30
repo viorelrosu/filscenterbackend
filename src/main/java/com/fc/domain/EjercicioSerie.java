@@ -21,10 +21,10 @@ public class EjercicioSerie {
 	@NotEmpty
 	private Integer porSemana;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Ejercicio ejercicio;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private TablaEjercicio tablaEjercicio;
 	// ===============================================================
 
