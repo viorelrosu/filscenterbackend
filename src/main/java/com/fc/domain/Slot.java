@@ -3,6 +3,10 @@ package com.fc.domain;
 import java.util.Collection;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -34,7 +38,8 @@ public class Slot {
 	private Usuario monitor;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "slot", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "slot", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Collection<Reserva> reservas;
 
 	// ===============================================================

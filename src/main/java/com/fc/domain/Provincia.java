@@ -3,11 +3,14 @@ package com.fc.domain;
 import java.util.Collection;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "provincia")
-public class Provincia{
+public class Provincia {
 
 //===================VARIABLES===================================
 
@@ -16,10 +19,13 @@ public class Provincia{
 	private Long id;
 
 	@NotEmpty
+	@NotNull
+	@Column(unique = true)
 	private String nombre;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "provincia", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "provincia", cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Collection<Localidad> localidades;
 //===============================================================
 

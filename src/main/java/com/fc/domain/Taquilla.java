@@ -52,6 +52,11 @@ public class Taquilla {
 		this.usuarios = usuarios;
 	}
 	
+	@PreRemove
+	public void nullificarTaquillas() {
+		usuarios.forEach(usuario -> usuario.setTaquilla(null));
+	}
+	
 	// ===============================================================
 
 	@Override

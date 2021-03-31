@@ -35,8 +35,7 @@ public class LocalidadRESTController {
 	@GetMapping("/localidad/{id}")
 	public ResponseEntity<Localidad> getLocalidadById(@PathVariable(value = "id") Long localidadId)
 			throws ResourceNotFoundException {
-		Localidad localidad = localidadRepository.findById(localidadId)
-				.orElseThrow(() -> new ResourceNotFoundException("Localidad not found on :: " + localidadId));
+		Localidad localidad = encontrarLocalidadPorId(localidadId);
 		return ResponseEntity.ok().body(localidad);
 	}
 
@@ -78,4 +77,13 @@ public class LocalidadRESTController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
+	
+	// METODOS
+	
+	public Localidad encontrarLocalidadPorId(Long localidadId) throws ResourceNotFoundException{
+		Localidad localidad = localidadRepository.findById(localidadId)
+				.orElseThrow(() -> new ResourceNotFoundException("Localidad not found on :: " + localidadId));
+		return localidad;
+	}
+	
 }

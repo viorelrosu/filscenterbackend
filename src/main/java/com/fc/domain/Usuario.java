@@ -1,8 +1,13 @@
 package com.fc.domain;
 
 import java.util.*;
+
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.*;
 
 @Entity
@@ -59,26 +64,32 @@ public class Usuario {
 
 	@JsonIgnore
 	@OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Direccion direccion;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "usuario")
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Collection<Factura> facturas;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "monitor")
+	@OneToMany(mappedBy = "monitor", cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Collection<Slot> slot;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "usuario")
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Collection<Reserva> reservas;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "suscriptor")
+	@OneToMany(mappedBy = "suscriptor", cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Collection<TablaEjercicio> tablasEjercicioSuscriptor;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "monitor")
+	@OneToMany(mappedBy = "monitor", cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Collection<TablaEjercicio> tablasEjercicioMonitor;
 
 	// ===============================================================

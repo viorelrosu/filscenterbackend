@@ -20,6 +20,7 @@ public class ProvinciaRESTController {
 
 	@Autowired
 	private ProvinciaRepository provinciaRepository;
+	
 
 	// LISTAR
 	@GetMapping("/provincia")
@@ -31,8 +32,7 @@ public class ProvinciaRESTController {
 	@GetMapping("/provincia/{id}")
 	public ResponseEntity<Provincia> getProvinciaById(@PathVariable(value = "id") Long provinciaId)
 			throws ResourceNotFoundException {
-		Provincia provincia = provinciaRepository.findById(provinciaId)
-				.orElseThrow(() -> new ResourceNotFoundException("Provincia not found on :: " + provinciaId));
+		Provincia provincia = encontarProvinciaPorId(provinciaId);
 		return ResponseEntity.ok().body(provincia);
 	}
 
@@ -47,12 +47,7 @@ public class ProvinciaRESTController {
 	  public ResponseEntity<Provincia> updateProvincia(
 	      @PathVariable(value = "id") Long provinciaId, @Valid @RequestBody Provincia provinciaDetails)
 	      throws ResourceNotFoundException {
-
-	    Provincia provincia =
-	        provinciaRepository
-	            .findById(provinciaId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Provincia not found on :: " + provinciaId));
-
+		Provincia provincia = encontarProvinciaPorId(provinciaId);
 	    provincia.setNombre(provinciaDetails.getNombre());
 	    final Provincia updatedProvincia = provinciaRepository.save(provincia);
 	    return ResponseEntity.ok(updatedProvincia);
@@ -61,14 +56,18 @@ public class ProvinciaRESTController {
 	// BORRAR
 	@DeleteMapping("/provincia/{id}")
 	  public Map<String, Boolean> deleteProvincia(@PathVariable(value = "id") Long provinciaId) throws Exception {
-	    Provincia provincia =
-	        provinciaRepository
-	            .findById(provinciaId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Provincia not found on :: " + provinciaId));
-
+		Provincia provincia = encontarProvinciaPorId(provinciaId);
 	    provinciaRepository.delete(provincia);
 	    Map<String, Boolean> response = new HashMap<>();
 	    response.put("deleted", Boolean.TRUE);
 	    return response;
 	  }
+	
+	// METODOS
+	
+	public Provincia encontarProvinciaPorId(Long provinciaId) throws ResourceNotFoundException{
+		Provincia provincia = provinciaRepository.findById(provinciaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Provincia not found on :: " + provinciaId));
+		return provincia;
+	}
 }

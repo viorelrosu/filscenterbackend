@@ -2,6 +2,10 @@ package com.fc.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -39,7 +43,8 @@ public class Direccion {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Localidad localidad;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	@JoinColumn(name = "usuario_id")
 	private Usuario usuario;
