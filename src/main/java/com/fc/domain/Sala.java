@@ -20,6 +20,7 @@ public class Sala {
 	private Long id;
 	
 	@NotEmpty
+	@Column(unique=true)
 	private Integer numero;
 
 	@NotEmpty

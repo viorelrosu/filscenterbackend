@@ -42,7 +42,7 @@ public class LocalidadRESTController {
 	// CREAR
 	@PostMapping("/localidad")
 	public Localidad createLocalidad(@Valid @RequestBody Localidad localidad) throws ResourceNotFoundException {
-		Provincia provincia = encontarProvinciaPorId(localidad.getProvincia().getId());
+		Provincia provincia = encontrarProvinciaPorId(localidad.getProvincia().getId());
 		localidad.setProvincia(provincia);
 		provincia.getLocalidades().add(localidad);
 		return localidadRepository.save(localidad);
@@ -57,7 +57,7 @@ public class LocalidadRESTController {
 		localidad.setNombre(localidadDetails.getNombre());
 		Provincia provincia = localidad.getProvincia();
 		provincia.getLocalidades().remove(localidad);
-		provincia = encontarProvinciaPorId(localidadDetails.getProvincia().getId());
+		provincia = encontrarProvinciaPorId(localidadDetails.getProvincia().getId());
 		localidad.setProvincia(provincia);
 		provincia.getLocalidades().add(localidad);
 		final Localidad updatedLocalidad = localidadRepository.save(localidad);
@@ -82,7 +82,7 @@ public class LocalidadRESTController {
 		return localidad;
 	}
 
-	public Provincia encontarProvinciaPorId(Long provinciaId) throws ResourceNotFoundException {
+	public Provincia encontrarProvinciaPorId(Long provinciaId) throws ResourceNotFoundException {
 		Provincia provincia = provinciaRepository.findById(provinciaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Provincia not found on :: " + provinciaId));
 		return provincia;

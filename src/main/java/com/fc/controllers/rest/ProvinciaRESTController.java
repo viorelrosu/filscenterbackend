@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/webservice")
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+		RequestMethod.DELETE })
 public class ProvinciaRESTController {
 
 	@Autowired
 	private ProvinciaRepository provinciaRepository;
-	
 
 	// LISTAR
 	@GetMapping("/provincia")
@@ -32,7 +32,7 @@ public class ProvinciaRESTController {
 	@GetMapping("/provincia/{id}")
 	public ResponseEntity<Provincia> getProvinciaById(@PathVariable(value = "id") Long provinciaId)
 			throws ResourceNotFoundException {
-		Provincia provincia = encontarProvinciaPorId(provinciaId);
+		Provincia provincia = encontrarProvinciaPorId(provinciaId);
 		return ResponseEntity.ok().body(provincia);
 	}
 
@@ -44,28 +44,27 @@ public class ProvinciaRESTController {
 
 	// ACTUALIZAR
 	@PutMapping("/provincia/{id}")
-	  public ResponseEntity<Provincia> updateProvincia(
-	      @PathVariable(value = "id") Long provinciaId, @Valid @RequestBody Provincia provinciaDetails)
-	      throws ResourceNotFoundException {
-		Provincia provincia = encontarProvinciaPorId(provinciaId);
-	    provincia.setNombre(provinciaDetails.getNombre());
-	    final Provincia updatedProvincia = provinciaRepository.save(provincia);
-	    return ResponseEntity.ok(updatedProvincia);
-	  }
-	
+	public ResponseEntity<Provincia> updateProvincia(@PathVariable(value = "id") Long provinciaId,
+			@Valid @RequestBody Provincia provinciaDetails) throws ResourceNotFoundException {
+		Provincia provincia = encontrarProvinciaPorId(provinciaId);
+		provincia.setNombre(provinciaDetails.getNombre());
+		final Provincia updatedProvincia = provinciaRepository.save(provincia);
+		return ResponseEntity.ok(updatedProvincia);
+	}
+
 	// BORRAR
 	@DeleteMapping("/provincia/{id}")
-	  public Map<String, Boolean> deleteProvincia(@PathVariable(value = "id") Long provinciaId) throws Exception {
-		Provincia provincia = encontarProvinciaPorId(provinciaId);
-	    provinciaRepository.delete(provincia);
-	    Map<String, Boolean> response = new HashMap<>();
-	    response.put("deleted", Boolean.TRUE);
-	    return response;
-	  }
-	
+	public Map<String, Boolean> deleteProvincia(@PathVariable(value = "id") Long provinciaId) throws Exception {
+		Provincia provincia = encontrarProvinciaPorId(provinciaId);
+		provinciaRepository.delete(provincia);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
+
 	// METODOS
-	
-	public Provincia encontarProvinciaPorId(Long provinciaId) throws ResourceNotFoundException{
+
+	public Provincia encontrarProvinciaPorId(Long provinciaId) throws ResourceNotFoundException {
 		Provincia provincia = provinciaRepository.findById(provinciaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Provincia not found on :: " + provinciaId));
 		return provincia;

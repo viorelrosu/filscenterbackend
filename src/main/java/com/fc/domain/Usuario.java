@@ -19,10 +19,6 @@ public class Usuario {
 	private Long id;
 
 	@NotEmpty
-	@Column(unique=true)
-	private String nombreUsuario;
-
-	@NotEmpty
 	private String password;
 
 	@NotEmpty
@@ -36,6 +32,7 @@ public class Usuario {
 	private String dni;
 
 	@NotEmpty
+	@Column(unique=true)
 	private String email;
 
 	@NotEmpty
@@ -102,14 +99,6 @@ public class Usuario {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getNombreUsuario() {
-		return nombreUsuario;
-	}
-
-	public void setNombreUsuario(String nombreUsuario) {
-		this.nombreUsuario = nombreUsuario;
 	}
 
 	public String getPassword() {
@@ -269,7 +258,7 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombreUsuario=" + nombreUsuario + ", password=" + password + ", nombre="
+		return "Usuario [id=" + id + ", password=" + password + ", nombre="
 				+ nombre + ", apellidos=" + apellidos + ", dni=" + dni + ", email=" + email + ", telefono=" + telefono
 				+ ", fechaNacimiento=" + fechaNacimiento + ", cuentaBancaria=" + cuentaBancaria + ", numeroTarjeta="
 				+ numeroTarjeta + ", biografia=" + biografia + ", rol=" + rol + ", suscripcion=" + suscripcion

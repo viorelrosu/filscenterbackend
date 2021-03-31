@@ -54,18 +54,18 @@ public class DireccionRESTController {
 	}
 
 	// CREAR
-	
+
 	@PostMapping("/direccion")
 	public Direccion createDireccion(@Valid @RequestBody Direccion direccion) throws ResourceNotFoundException {
-		
+
 		Usuario usuario = encontrarUsuarioPorId(direccion.getUsuario().getId());
-		if(usuario.getDireccion()==null) {
+		if (usuario.getDireccion() == null) {
 			Localidad localidad = encontrarLocalidadIdProvinciaYNombreLocalidad(direccion.getLocalidad().getNombre(),
 					direccion.getLocalidad().getProvincia().getId());
 			if (localidad == null) {
 				localidad = new Localidad();
 				localidad.setNombre(direccion.getLocalidad().getNombre());
-				Provincia provincia = encontarProvinciaPorId(direccion.getLocalidad().getProvincia().getId());
+				Provincia provincia = encontrarProvinciaPorId(direccion.getLocalidad().getProvincia().getId());
 				localidad.setProvincia(provincia);
 				provincia.getLocalidades().add(localidad);
 				localidad = localidadRepository.save(localidad);
@@ -75,7 +75,7 @@ public class DireccionRESTController {
 			direccion.setUsuario(usuario);
 			direccion.setLocalidad(localidad);
 			return direccionRepository.save(direccion);
-		}else {
+		} else {
 			return usuario.getDireccion();
 		}
 	}
@@ -94,19 +94,19 @@ public class DireccionRESTController {
 		direccion.setPuerta(direccionDetails.getPuerta());
 		direccion.setCodigoPostal(direccionDetails.getCodigoPostal());
 
-		Localidad localidad = localidadRepository.findOneByNombreAndProvinciaId(direccionDetails.getLocalidad().getNombre(),
+		Localidad localidad = encontrarLocalidadIdProvinciaYNombreLocalidad(direccionDetails.getLocalidad().getNombre(),
 				direccionDetails.getLocalidad().getProvincia().getId());
 		if (localidad == null) {
 			localidad = new Localidad();
 			localidad.setNombre(direccion.getLocalidad().getNombre());
-			Provincia provincia = encontarProvinciaPorId(direccion.getLocalidad().getProvincia().getId());
+			Provincia provincia = encontrarProvinciaPorId(direccion.getLocalidad().getProvincia().getId());
 			localidad.setProvincia(provincia);
 			provincia.getLocalidades().add(localidad);
 			localidad = localidadRepository.save(localidad);
 		}
 		localidad.getDirecciones().add(direccion);
 		direccion.setLocalidad(localidad);
-		
+
 		final Direccion updatedDireccion = direccionRepository.save(direccion);
 		return ResponseEntity.ok(updatedDireccion);
 	}
@@ -129,12 +129,12 @@ public class DireccionRESTController {
 		return localidad;
 	}
 
-	public Localidad encontrarLocalidadIdProvinciaYNombreLocalidad(String localidadNombre, Long provinciaId){
+	public Localidad encontrarLocalidadIdProvinciaYNombreLocalidad(String localidadNombre, Long provinciaId) {
 		Localidad localidad = localidadRepository.findOneByNombreAndProvinciaId(localidadNombre, provinciaId);
 		return localidad;
 	}
 
-	public Provincia encontarProvinciaPorId(Long provinciaId) throws ResourceNotFoundException {
+	public Provincia encontrarProvinciaPorId(Long provinciaId) throws ResourceNotFoundException {
 		Provincia provincia = provinciaRepository.findById(provinciaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Provincia not found on :: " + provinciaId));
 		return provincia;
