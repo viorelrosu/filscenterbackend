@@ -41,8 +41,8 @@ public class LocalidadRESTController {
 
 	// CREAR
 	@PostMapping("/localidad")
-	public Localidad createLocalidad(@Valid @RequestBody Localidad localidad) {
-		Provincia provincia = provinciaRepository.findById(localidad.getProvincia().getId()).get();
+	public Localidad createLocalidad(@Valid @RequestBody Localidad localidad) throws ResourceNotFoundException {
+		Provincia provincia = encontarProvinciaPorId(localidad.getProvincia().getId());
 		localidad.setProvincia(provincia);
 		provincia.getLocalidades().add(localidad);
 		return localidadRepository.save(localidad);
@@ -53,13 +53,11 @@ public class LocalidadRESTController {
 	public ResponseEntity<Localidad> updateLocalidad(@PathVariable(value = "id") Long localidadId,
 			@Valid @RequestBody Localidad localidadDetails) throws ResourceNotFoundException {
 
-		Localidad localidad = localidadRepository.findById(localidadId)
-				.orElseThrow(() -> new ResourceNotFoundException("Localidad not found on :: " + localidadId));
-
+		Localidad localidad = encontrarLocalidadPorId(localidadId);
 		localidad.setNombre(localidadDetails.getNombre());
 		Provincia provincia = localidad.getProvincia();
 		provincia.getLocalidades().remove(localidad);
-		provincia = provinciaRepository.findById(localidadDetails.getProvincia().getId()).get();
+		provincia = encontarProvinciaPorId(localidadDetails.getProvincia().getId());
 		localidad.setProvincia(provincia);
 		provincia.getLocalidades().add(localidad);
 		final Localidad updatedLocalidad = localidadRepository.save(localidad);
@@ -69,21 +67,25 @@ public class LocalidadRESTController {
 	// BORRAR
 	@DeleteMapping("/localidad/{id}")
 	public Map<String, Boolean> deleteLocalidad(@PathVariable(value = "id") Long localidadId) throws Exception {
-		Localidad localidad = localidadRepository.findById(localidadId)
-				.orElseThrow(() -> new ResourceNotFoundException("Localidad not found on :: " + localidadId));
-
+		Localidad localidad = encontrarLocalidadPorId(localidadId);
 		localidadRepository.delete(localidad);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
-	
+
 	// METODOS
-	
-	public Localidad encontrarLocalidadPorId(Long localidadId) throws ResourceNotFoundException{
+
+	public Localidad encontrarLocalidadPorId(Long localidadId) throws ResourceNotFoundException {
 		Localidad localidad = localidadRepository.findById(localidadId)
 				.orElseThrow(() -> new ResourceNotFoundException("Localidad not found on :: " + localidadId));
 		return localidad;
 	}
-	
+
+	public Provincia encontarProvinciaPorId(Long provinciaId) throws ResourceNotFoundException {
+		Provincia provincia = provinciaRepository.findById(provinciaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Provincia not found on :: " + provinciaId));
+		return provincia;
+	}
+
 }

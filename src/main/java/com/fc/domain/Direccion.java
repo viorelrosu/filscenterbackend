@@ -40,7 +40,7 @@ public class Direccion {
 	private Integer codigoPostal;
 
 	@NotNull
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private Localidad localidad;
 
 	@OneToOne(cascade = CascadeType.ALL)

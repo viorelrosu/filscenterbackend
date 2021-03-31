@@ -28,7 +28,7 @@ public class Actividad {
 	@NotEmpty
 	private Integer dificultad;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private TipoActividad tipoActividad;
 
 	@JsonIgnore

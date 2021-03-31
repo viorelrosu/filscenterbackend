@@ -28,13 +28,13 @@ public class Slot {
 	@NotEmpty
 	private Integer aforoActual;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private Sala sala;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private Actividad actividad;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private Usuario monitor;
 
 	@JsonIgnore

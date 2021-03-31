@@ -30,101 +30,125 @@ import com.fc.repositories.UsuarioRepository;
 @RestController
 @RequestMapping("/webservice")
 public class DireccionRESTController {
-    @Autowired
-    private DireccionRepository direccionRepository;
-    @Autowired
-    private LocalidadRepository localidadRepository;
-    @Autowired
-    private ProvinciaRepository provinciaRepository;
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+	@Autowired
+	private DireccionRepository direccionRepository;
+	@Autowired
+	private LocalidadRepository localidadRepository;
+	@Autowired
+	private ProvinciaRepository provinciaRepository;
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
- // LISTAR
- 	@GetMapping("/direccion")
- 	public List<Direccion> getAllDirecciones() {
- 		return direccionRepository.findAll();
- 	}
+	// LISTAR
+	@GetMapping("/direccion")
+	public List<Direccion> getAllDirecciones() {
+		return direccionRepository.findAll();
+	}
 
- 	// RECUPERAR POR ID
- 	@GetMapping("/direccion/{id}")
- 	public ResponseEntity<Direccion> getDireccionById(@PathVariable(value = "id") Long direccionId)
- 			throws ResourceNotFoundException {
- 		Direccion direccion = direccionRepository.findById(direccionId)
- 				.orElseThrow(() -> new ResourceNotFoundException("Direccion not found on :: " + direccionId));
- 		return ResponseEntity.ok().body(direccion);
- 	}
+	// RECUPERAR POR ID
+	@GetMapping("/direccion/{id}")
+	public ResponseEntity<Direccion> getDireccionById(@PathVariable(value = "id") Long direccionId)
+			throws ResourceNotFoundException {
+		Direccion direccion = encontrarDireccionPorId(direccionId);
+		return ResponseEntity.ok().body(direccion);
+	}
 
- 	// CREAR
- 	@PostMapping("/direccion")
- 	public Direccion createDireccion(@Valid @RequestBody Direccion direccion) {
- 		
- 		Usuario usuario = usuarioRepository.findById(direccion.getUsuario().getId()).get();
- 		direccion.setUsuario(usuario);
- 		usuario.setDireccion(direccion);
- 		
-		Localidad localidad = localidadRepository.findOneByNombreAndProvinciaId(direccion.getLocalidad().getNombre(), direccion.getLocalidad().getProvincia().getId());
-		if(localidad == null) {
+	// CREAR
+	
+	@PostMapping("/direccion")
+	public Direccion createDireccion(@Valid @RequestBody Direccion direccion) throws ResourceNotFoundException {
+		
+		Usuario usuario = encontrarUsuarioPorId(direccion.getUsuario().getId());
+		if(usuario.getDireccion()==null) {
+			Localidad localidad = encontrarLocalidadIdProvinciaYNombreLocalidad(direccion.getLocalidad().getNombre(),
+					direccion.getLocalidad().getProvincia().getId());
+			if (localidad == null) {
+				localidad = new Localidad();
+				localidad.setNombre(direccion.getLocalidad().getNombre());
+				Provincia provincia = encontarProvinciaPorId(direccion.getLocalidad().getProvincia().getId());
+				localidad.setProvincia(provincia);
+				provincia.getLocalidades().add(localidad);
+				localidad = localidadRepository.save(localidad);
+			}
+			usuario.setDireccion(direccion);
+			localidad.getDirecciones().add(direccion);
+			direccion.setUsuario(usuario);
+			direccion.setLocalidad(localidad);
+			return direccionRepository.save(direccion);
+		}else {
+			return usuario.getDireccion();
+		}
+	}
+
+	// ACTUALIZAR
+	@PutMapping("/direccion/{id}")
+	public ResponseEntity<Direccion> updateDireccion(@PathVariable(value = "id") Long direccionId,
+			@Valid @RequestBody Direccion direccionDetails) throws ResourceNotFoundException {
+
+		Direccion direccion = encontrarDireccionPorId(direccionId);
+		direccion.setCalle(direccionDetails.getCalle());
+		direccion.setNumero(direccionDetails.getNumero());
+		direccion.setBloque(direccionDetails.getBloque());
+		direccion.setEscalera(direccionDetails.getEscalera());
+		direccion.setPiso(direccionDetails.getPiso());
+		direccion.setPuerta(direccionDetails.getPuerta());
+		direccion.setCodigoPostal(direccionDetails.getCodigoPostal());
+
+		Localidad localidad = localidadRepository.findOneByNombreAndProvinciaId(direccionDetails.getLocalidad().getNombre(),
+				direccionDetails.getLocalidad().getProvincia().getId());
+		if (localidad == null) {
 			localidad = new Localidad();
 			localidad.setNombre(direccion.getLocalidad().getNombre());
-			Provincia provincia = provinciaRepository.findById(direccion.getLocalidad().getProvincia().getId()).get();
+			Provincia provincia = encontarProvinciaPorId(direccion.getLocalidad().getProvincia().getId());
 			localidad.setProvincia(provincia);
 			provincia.getLocalidades().add(localidad);
 			localidad = localidadRepository.save(localidad);
 		}
-		direccion.setLocalidad(localidad);
 		localidad.getDirecciones().add(direccion);
- 		return direccionRepository.save(direccion);
- 	}
+		direccion.setLocalidad(localidad);
+		
+		final Direccion updatedDireccion = direccionRepository.save(direccion);
+		return ResponseEntity.ok(updatedDireccion);
+	}
 
- 	// ACTUALIZAR
- 	@PutMapping("/direccion/{id}")
- 	public ResponseEntity<Direccion> updateDireccion(@PathVariable(value = "id") Long direccionId,
- 			@Valid @RequestBody Direccion direccionDetails) throws ResourceNotFoundException {
+	// BORRAR
+	@DeleteMapping("/direccion/{id}")
+	public Map<String, Boolean> deleteDireccion(@PathVariable(value = "id") Long direccionId) throws Exception {
+		Direccion direccion = encontrarDireccionPorId(direccionId);
+		direccionRepository.delete(direccion);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 
- 		Direccion direccion = direccionRepository.findById(direccionId)
- 				.orElseThrow(() -> new ResourceNotFoundException("Direccion not found on :: " + direccionId));
+	// METODOS
 
- 		direccion.setCalle(direccionDetails.getCalle());
- 		direccion.setNumero(direccionDetails.getNumero());
- 		direccion.setBloque(direccionDetails.getBloque());
- 		direccion.setEscalera(direccionDetails.getEscalera());
- 		direccion.setPiso(direccionDetails.getPiso());
- 		direccion.setPuerta(direccionDetails.getPuerta());
- 		direccion.setCodigoPostal(direccionDetails.getCodigoPostal());
- 		
- 		
- 		Localidad localidad = localidadRepository.findOneByNombreAndProvinciaId(direccionDetails.getLocalidad().getNombre(), direccionDetails.getLocalidad().getProvincia().getId());
-		if(localidad == null) {
-			localidad = new Localidad();
-			localidad.setNombre(direccion.getLocalidad().getNombre());
-			Provincia provincia = provinciaRepository.findById(direccion.getLocalidad().getProvincia().getId()).get();
-			localidad.setProvincia(provincia);
-			provincia.getLocalidades().add(localidad);
-			localidad = localidadRepository.save(localidad);
-		}
- 		
- 		Usuario usuario = usuarioRepository.findById(direccionDetails.getUsuario().getId()).get();
- 		
- 		direccion.setLocalidad(localidad);
- 		direccion.setUsuario(usuario);
- 		localidad.getDirecciones().add(direccion);
- 		usuario.setDireccion(direccion);
- 		
- 		final Direccion updatedDireccion = direccionRepository.save(direccion);
-  	    return ResponseEntity.ok(updatedDireccion);
-  	  }
-  	
-  	// BORRAR
-  	@DeleteMapping("/direccion/{id}")
-  	  public Map<String, Boolean> deleteDireccion(@PathVariable(value = "id") Long direccionId) throws Exception {
-  	    Direccion direccion =
-  	        direccionRepository
-  	            .findById(direccionId)
-  	            .orElseThrow(() -> new ResourceNotFoundException("Direccion not found on :: " + direccionId));
+	public Localidad encontrarLocalidadPorId(Long localidadId) throws ResourceNotFoundException {
+		Localidad localidad = localidadRepository.findById(localidadId)
+				.orElseThrow(() -> new ResourceNotFoundException("Localidad not found on :: " + localidadId));
+		return localidad;
+	}
 
-  	    direccionRepository.delete(direccion);
-  	    Map<String, Boolean> response = new HashMap<>();
-  	    response.put("deleted", Boolean.TRUE);
-  	    return response;
-  	  }
+	public Localidad encontrarLocalidadIdProvinciaYNombreLocalidad(String localidadNombre, Long provinciaId){
+		Localidad localidad = localidadRepository.findOneByNombreAndProvinciaId(localidadNombre, provinciaId);
+		return localidad;
+	}
+
+	public Provincia encontarProvinciaPorId(Long provinciaId) throws ResourceNotFoundException {
+		Provincia provincia = provinciaRepository.findById(provinciaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Provincia not found on :: " + provinciaId));
+		return provincia;
+	}
+
+	public Direccion encontrarDireccionPorId(Long direccionId) throws ResourceNotFoundException {
+		Direccion direccion = direccionRepository.findById(direccionId)
+				.orElseThrow(() -> new ResourceNotFoundException("Direccion not found on :: " + direccionId));
+		return direccion;
+	}
+
+	public Usuario encontrarUsuarioPorId(Long usuarioId) throws ResourceNotFoundException {
+		Usuario usuario = usuarioRepository.findById(usuarioId)
+				.orElseThrow(() -> new ResourceNotFoundException("Usuario not found on :: " + usuarioId));
+		return usuario;
+	}
 }

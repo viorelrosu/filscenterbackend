@@ -34,10 +34,10 @@ public class TablaEjercicio {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Collection<EjercicioSerie> ejercicioSeries;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private Usuario monitor;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private Usuario suscriptor;
 
 	// ===============================================================

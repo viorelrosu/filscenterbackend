@@ -53,13 +53,13 @@ public class Usuario {
 	@Column(nullable = true)
 	private String biografia;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private Rol rol;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private Suscripcion suscripcion;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private Taquilla taquilla;
 
 	@JsonIgnore

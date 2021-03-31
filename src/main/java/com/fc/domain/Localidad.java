@@ -22,7 +22,7 @@ public class Localidad{
 	@NotEmpty
 	private String nombre;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private Provincia provincia;
 
 	@JsonIgnore

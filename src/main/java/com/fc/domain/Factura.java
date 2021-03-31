@@ -25,7 +25,7 @@ public class Factura {
 	@NotNull
 	private Boolean pagado;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private Usuario usuario;
 
 	// ===============================================================
