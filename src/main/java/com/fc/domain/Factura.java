@@ -21,6 +21,9 @@ public class Factura {
 
 	@NotEmpty
 	private Integer numero;
+	
+	@NotEmpty
+	private Double importe;
 
 	@NotNull
 	private Boolean pagado;
@@ -70,12 +73,21 @@ public class Factura {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+	
+	public Double getImporte() {
+		return importe;
+	}
+
+	public void setImporte(Double importe) {
+		this.importe = importe;
+	}
+	
 	// ===============================================================
 
 	@Override
 	public String toString() {
-		return "Factura [id=" + id + ", fecha=" + fecha + ", numero=" + numero + ", pagado=" + pagado + ", usuario="
-				+ usuario + "]";
+		return "Factura [id=" + id + ", fecha=" + fecha + ", numero=" + numero + ", importe=" + importe + ", pagado="
+				+ pagado + ", usuario=" + usuario + "]";
 	}
 
 }

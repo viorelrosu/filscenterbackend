@@ -1,5 +1,7 @@
 package com.fc.domain;
 
+import java.util.Date;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -14,6 +16,9 @@ public class Reserva {
 
 	@NotNull
 	private Boolean recurrente;
+	
+	@NotNull
+	private Date fechaInicio;
 
 	@ManyToOne
 	private Usuario usuario;
@@ -57,11 +62,20 @@ public class Reserva {
 		this.slot = slot;
 	}
 	
+	public Date getFechaInicio() {
+		return fechaInicio;
+	}
+
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+	
 	// ===============================================================
 
 	@Override
 	public String toString() {
-		return "Reserva [id=" + id + ", recurrente=" + recurrente + ", usuario=" + usuario + ", slot=" + slot + "]";
+		return "Reserva [id=" + id + ", recurrente=" + recurrente + ", fechaInicio=" + fechaInicio + ", usuario="
+				+ usuario + ", slot=" + slot + "]";
 	}
 
 }

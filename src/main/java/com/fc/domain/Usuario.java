@@ -44,7 +44,7 @@ public class Usuario {
 	@Column(nullable = true)
 	private String cuentaBancaria;
 
-	@Column(nullable = true)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer numeroTarjeta;
 
 	@Column(nullable = true)
@@ -54,10 +54,12 @@ public class Usuario {
 	private Rol rol;
 
 	@ManyToOne
-	private Suscripcion suscripcion;
-
-	@ManyToOne
 	private Taquilla taquilla;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Collection <Suscripcion> suscripciones;
 
 	@JsonIgnore
 	@OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
@@ -72,7 +74,7 @@ public class Usuario {
 	@JsonIgnore
 	@OneToMany(mappedBy = "monitor", cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Collection<Slot> slot;
+	private Collection<Slot> slots;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
@@ -189,12 +191,12 @@ public class Usuario {
 		this.rol = rol;
 	}
 
-	public Suscripcion getSuscripcion() {
-		return suscripcion;
+	public Collection<Suscripcion> getSuscripciones() {
+		return suscripciones;
 	}
 
-	public void setSuscripcion(Suscripcion suscripcion) {
-		this.suscripcion = suscripcion;
+	public void setSuscripciones(Collection<Suscripcion> suscripciones) {
+		this.suscripciones = suscripciones;
 	}
 
 	public Taquilla getTaquilla() {
@@ -222,12 +224,12 @@ public class Usuario {
 	}
 
 
-	public Collection<Slot> getSlot() {
-		return slot;
+	public Collection<Slot> getSlots() {
+		return slots;
 	}
 
-	public void setSlot(Collection<Slot> slot) {
-		this.slot = slot;
+	public void setSlots(Collection<Slot> slots) {
+		this.slots = slots;
 	}
 
 	public Collection<Reserva> getReservas() {
@@ -258,11 +260,11 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", password=" + password + ", nombre="
-				+ nombre + ", apellidos=" + apellidos + ", dni=" + dni + ", email=" + email + ", telefono=" + telefono
-				+ ", fechaNacimiento=" + fechaNacimiento + ", cuentaBancaria=" + cuentaBancaria + ", numeroTarjeta="
-				+ numeroTarjeta + ", biografia=" + biografia + ", rol=" + rol + ", suscripcion=" + suscripcion
-				+ ", taquilla=" + taquilla + ", direccion=" + direccion + ", facturas=" + facturas + ", slot=" + slot
+		return "Usuario [id=" + id + ", password=" + password + ", nombre=" + nombre + ", apellidos=" + apellidos
+				+ ", dni=" + dni + ", email=" + email + ", telefono=" + telefono + ", fechaNacimiento="
+				+ fechaNacimiento + ", cuentaBancaria=" + cuentaBancaria + ", numeroTarjeta=" + numeroTarjeta
+				+ ", biografia=" + biografia + ", rol=" + rol + ", taquilla=" + taquilla + ", suscripciones="
+				+ suscripciones + ", direccion=" + direccion + ", facturas=" + facturas + ", slots=" + slots
 				+ ", reservas=" + reservas + ", tablasEjercicioSuscriptor=" + tablasEjercicioSuscriptor
 				+ ", tablasEjercicioMonitor=" + tablasEjercicioMonitor + "]";
 	}

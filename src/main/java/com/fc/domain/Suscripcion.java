@@ -1,15 +1,9 @@
 package com.fc.domain;
 
-import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "suscripcion")
@@ -29,10 +23,8 @@ public class Suscripcion {
 	@ManyToOne
 	private TipoSuscripcion tipoSuscripcion;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "suscripcion", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Collection<Usuario> usuarios;
+	@ManyToOne
+	private Usuario usuario;
 
 	// ===============================================================
 	
@@ -71,12 +63,12 @@ public class Suscripcion {
 		this.tipoSuscripcion = tipoSuscripcion;
 	}
 	
-	public Collection<Usuario> getUsuarios() {
-		return usuarios;
+	public Usuario getUsuario() {
+		return usuario;
 	}
 
-	public void setUsuarios(Collection<Usuario> usuarios) {
-		this.usuarios = usuarios;
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	// ===============================================================
@@ -84,7 +76,7 @@ public class Suscripcion {
 	@Override
 	public String toString() {
 		return "Suscripcion [id=" + id + ", fechaAlta=" + fechaAlta + ", fechaBaja=" + fechaBaja + ", tipoSuscripcion="
-				+ tipoSuscripcion + ", usuarios=" + usuarios + "]";
+				+ tipoSuscripcion + ", usuario=" + usuario + "]";
 	}
 	
 }
