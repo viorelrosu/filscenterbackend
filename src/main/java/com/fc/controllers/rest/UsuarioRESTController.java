@@ -58,6 +58,14 @@ public class UsuarioRESTController {
 		return ResponseEntity.ok().body(usuario);
 	}
 
+	// RECUPERAR POR EMAIL
+	@GetMapping("/usuario/email/{email}")
+	public ResponseEntity<Usuario> getUsuarioByEmail(@PathVariable(value = "email") String usuarioEmail)
+			throws ResourceNotFoundException {
+		Usuario usuario = usuarioRepository.findByEmail(usuarioEmail);
+		return ResponseEntity.ok().body(usuario);
+	}
+
 	// CREAR
 	@PostMapping("/usuario")
 	public Usuario createUsuario(@Valid @RequestBody Usuario usuario) throws ResourceNotFoundException {
@@ -88,7 +96,7 @@ public class UsuarioRESTController {
 		usuario.setRol(rol);
 		rol.getUsuarios().add(usuario);
 		Taquilla taquilla = usuario.getTaquilla();
-		if(taquilla != null) {
+		if (taquilla != null) {
 			taquilla.getUsuarios().remove(usuario);
 		}
 		taquilla = encontrarTaquillaPorId(usuarioDetails.getTaquilla().getId());
@@ -121,13 +129,13 @@ public class UsuarioRESTController {
 				.orElseThrow(() -> new ResourceNotFoundException("Rol not found on :: " + rolId));
 		return rol;
 	}
-	
+
 	public Taquilla encontrarTaquillaPorId(Long taquillaId) throws ResourceNotFoundException {
 		Taquilla taquilla = taquillaRepository.findById(taquillaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Taquilla not found on :: " + taquillaId));
 		return taquilla;
 	}
-	
+
 	public Suscripcion encontrarSuscripcionPorId(Long suscripcionId) throws ResourceNotFoundException {
 		Suscripcion suscripcion = suscripcionRepository.findById(suscripcionId)
 				.orElseThrow(() -> new ResourceNotFoundException("Suscripcion not found on :: " + suscripcionId));
