@@ -25,7 +25,7 @@ import com.fc.security.services.UserDetailsServiceImpl;
 		// jsr250Enabled = true,
 		prePostEnabled = true)
 		
-public class SecurityCongigurer extends WebSecurityConfigurerAdapter{
+public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
 
 	@Autowired
 	private UserDetailsServiceImpl userDetailsServiceImpl;

@@ -11,20 +11,28 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fc.security.domain.AuthenticationRequest;
 import com.fc.security.domain.JwtResponse;
 import com.fc.security.util.JwtUtil;
 
+@RestController
+@RequestMapping("/webservice")
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+		RequestMethod.DELETE })
 public class AuthenticationRESTController {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	@Autowired
 	private JwtUtil jwtTokenUtil;
 
-	@PostMapping("/webservice/authenticate")
+	@PostMapping("/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
 			throws Exception {
 		try {
