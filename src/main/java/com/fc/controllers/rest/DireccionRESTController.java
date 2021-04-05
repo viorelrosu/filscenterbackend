@@ -70,10 +70,10 @@ public class DireccionRESTController {
 				provincia.getLocalidades().add(localidad);
 				localidad = localidadRepository.save(localidad);
 			}
-			usuario.setDireccion(direccion);
-			localidad.getDirecciones().add(direccion);
 			direccion.setUsuario(usuario);
 			direccion.setLocalidad(localidad);
+			usuario.setDireccion(direccion);
+			localidad.getDirecciones().add(direccion);
 			return direccionRepository.save(direccion);
 		} else {
 			return usuario.getDireccion();

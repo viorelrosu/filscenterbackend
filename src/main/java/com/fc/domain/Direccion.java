@@ -45,7 +45,7 @@ public class Direccion {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JsonIgnore
+	//@JsonIgnore
 	@JoinColumn(name = "usuario_id")
 	private Usuario usuario;
 
