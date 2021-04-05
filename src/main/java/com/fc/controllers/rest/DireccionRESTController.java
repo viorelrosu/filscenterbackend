@@ -1,5 +1,6 @@
 package com.fc.controllers.rest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +68,7 @@ public class DireccionRESTController {
 				localidad.setNombre(direccion.getLocalidad().getNombre());
 				Provincia provincia = encontrarProvinciaPorId(direccion.getLocalidad().getProvincia().getId());
 				localidad.setProvincia(provincia);
+				localidad.setDirecciones(new ArrayList<Direccion>());
 				provincia.getLocalidades().add(localidad);
 				localidad = localidadRepository.save(localidad);
 			}
