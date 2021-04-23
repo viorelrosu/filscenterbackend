@@ -61,7 +61,6 @@ public class Usuario {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Collection <Suscripcion> suscripciones;
 
-	@JsonIgnore
 	@OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Direccion direccion;

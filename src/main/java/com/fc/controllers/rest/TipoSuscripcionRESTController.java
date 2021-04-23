@@ -1,13 +1,11 @@
 package com.fc.controllers.rest;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fc.domain.TipoSuscripcion;
 import com.fc.exceptions.ResourceNotFoundException;
-import com.fc.repositories.TipoSuscripcionRepository;
+import com.fc.services.TipoSuscripcionService;
 
 @RestController
 @RequestMapping("/webservice")
@@ -30,57 +28,39 @@ import com.fc.repositories.TipoSuscripcionRepository;
 public class TipoSuscripcionRESTController {
 
 	@Autowired
-	private TipoSuscripcionRepository tipoSuscripcionRepository;
+	private TipoSuscripcionService tipoSuscripcionService;
 
 	// LISTAR
 	@GetMapping("/tipoSuscripcion")
-	public List<TipoSuscripcion> getAllTiposSuscripciones() {
-		return tipoSuscripcionRepository.findAll();
+	public List<TipoSuscripcion> getAllTipoSuscripcions() {
+		return tipoSuscripcionService.getTipoSuscripcions();
 	}
 
 	// RECUPERAR POR ID
 	@GetMapping("/tipoSuscripcion/{id}")
-	public ResponseEntity<TipoSuscripcion> getTipoSuscripcionById(@PathVariable(value = "id") Long tipoSuscripcionId)
+	public TipoSuscripcion getTipoSuscripcionById(@PathVariable(value = "id") Long tipoSuscripcionId)
 			throws ResourceNotFoundException {
-		TipoSuscripcion tipoSuscripcion = encontrarTipoSuscripcionPorId(tipoSuscripcionId);
-		return ResponseEntity.ok().body(tipoSuscripcion);
+		return tipoSuscripcionService.getTipoSuscripcionById(tipoSuscripcionId);
 	}
 
 	// CREAR
 	@PostMapping("/tipoSuscripcion")
 	public TipoSuscripcion createTipoSuscripcion(@Valid @RequestBody TipoSuscripcion tipoSuscripcion) {
-		return tipoSuscripcionRepository.save(tipoSuscripcion);
+		return tipoSuscripcionService.saveTipoSuscripcion(tipoSuscripcion);
 	}
 
 	// ACTUALIZAR
 	@PutMapping("/tipoSuscripcion/{id}")
-	public ResponseEntity<TipoSuscripcion> updateTipoSuscripcion(@PathVariable(value = "id") Long tipoSuscripcionId,
+	public TipoSuscripcion updateTipoSuscripcion(@PathVariable(value = "id") Long tipoSuscripcionId,
 			@Valid @RequestBody TipoSuscripcion tipoSuscripcionDetails) throws ResourceNotFoundException {
-		TipoSuscripcion tipoSuscripcion = encontrarTipoSuscripcionPorId(tipoSuscripcionId);
-		tipoSuscripcion.setNombre(tipoSuscripcionDetails.getNombre());
-		tipoSuscripcion.setDuracion(tipoSuscripcionDetails.getDuracion());
-		tipoSuscripcion.setTarifa(tipoSuscripcionDetails.getTarifa());
-		final TipoSuscripcion updatedTipoSuscripcion = tipoSuscripcionRepository.save(tipoSuscripcion);
-		return ResponseEntity.ok(updatedTipoSuscripcion);
+		return tipoSuscripcionService.updateTipoSuscripcion(tipoSuscripcionId, tipoSuscripcionDetails);
 	}
 
 	// BORRAR
 	@DeleteMapping("/tipoSuscripcion/{id}")
 	public Map<String, Boolean> deleteTipoSuscripcion(@PathVariable(value = "id") Long tipoSuscripcionId)
 			throws Exception {
-		TipoSuscripcion tipoSuscripcion = encontrarTipoSuscripcionPorId(tipoSuscripcionId);
-		tipoSuscripcionRepository.delete(tipoSuscripcion);
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
-		return response;
-	}
-
-	// METODOS
-
-	public TipoSuscripcion encontrarTipoSuscripcionPorId(Long tipoSuscripcionId) throws ResourceNotFoundException {
-		TipoSuscripcion tipoSuscripcion = tipoSuscripcionRepository.findById(tipoSuscripcionId).orElseThrow(
-				() -> new ResourceNotFoundException("TipoSuscripcion not found on :: " + tipoSuscripcionId));
-		return tipoSuscripcion;
+		return tipoSuscripcionService.deleteTipoSuscripcion(tipoSuscripcionId);
 	}
 
 }

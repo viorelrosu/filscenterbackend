@@ -55,7 +55,6 @@ public class DireccionRESTController {
 	}
 
 	// CREAR
-
 	@PostMapping("/direccion")
 	public Direccion createDireccion(@Valid @RequestBody Direccion direccion) throws ResourceNotFoundException {
 

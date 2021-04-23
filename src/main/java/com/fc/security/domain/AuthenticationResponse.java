@@ -1,4 +1,4 @@
-package com.fc.controllers.rest;
+package com.fc.security.domain;
 
 public class AuthenticationResponse {
 

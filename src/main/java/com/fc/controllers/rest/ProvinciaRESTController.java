@@ -2,71 +2,51 @@ package com.fc.controllers.rest;
 
 import com.fc.domain.Provincia;
 import com.fc.exceptions.ResourceNotFoundException;
-import com.fc.repositories.ProvinciaRepository;
+import com.fc.services.ProvinciaService;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/webservice")
-@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
-		RequestMethod.DELETE })
 public class ProvinciaRESTController {
 
 	@Autowired
-	private ProvinciaRepository provinciaRepository;
+	private ProvinciaService provinciaService;
 
 	// LISTAR
 	@GetMapping("/provincia")
 	public List<Provincia> getAllProvincias() {
-		return provinciaRepository.findAll();
+		return provinciaService.getProvincias();
 	}
 
 	// RECUPERAR POR ID
 	@GetMapping("/provincia/{id}")
-	public ResponseEntity<Provincia> getProvinciaById(@PathVariable(value = "id") Long provinciaId)
-			throws ResourceNotFoundException {
-		Provincia provincia = encontrarProvinciaPorId(provinciaId);
-		return ResponseEntity.ok().body(provincia);
+	public Provincia getProvinciaById(@PathVariable(value = "id") Long provinciaId) throws ResourceNotFoundException {
+		return provinciaService.getProvinciaById(provinciaId);
 	}
 
 	// CREAR
 	@PostMapping("/provincia")
-	public Provincia createProvincia(@Valid @RequestBody Provincia provincia) {
-		return provinciaRepository.save(provincia);
+	public Provincia saveProvincia(@Valid @RequestBody Provincia provincia) {
+		return provinciaService.saveProvincia(provincia);
 	}
 
 	// ACTUALIZAR
 	@PutMapping("/provincia/{id}")
-	public ResponseEntity<Provincia> updateProvincia(@PathVariable(value = "id") Long provinciaId,
+	public Provincia updateProvincia(@PathVariable(value = "id") Long provinciaId,
 			@Valid @RequestBody Provincia provinciaDetails) throws ResourceNotFoundException {
-		Provincia provincia = encontrarProvinciaPorId(provinciaId);
-		provincia.setNombre(provinciaDetails.getNombre());
-		final Provincia updatedProvincia = provinciaRepository.save(provincia);
-		return ResponseEntity.ok(updatedProvincia);
+		return provinciaService.updateProvincia(provinciaId, provinciaDetails);
 	}
 
 	// BORRAR
 	@DeleteMapping("/provincia/{id}")
 	public Map<String, Boolean> deleteProvincia(@PathVariable(value = "id") Long provinciaId) throws Exception {
-		Provincia provincia = encontrarProvinciaPorId(provinciaId);
-		provinciaRepository.delete(provincia);
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
-		return response;
+		return provinciaService.deleteProvincia(provinciaId);
 	}
 
-	// METODOS
-
-	public Provincia encontrarProvinciaPorId(Long provinciaId) throws ResourceNotFoundException {
-		Provincia provincia = provinciaRepository.findById(provinciaId)
-				.orElseThrow(() -> new ResourceNotFoundException("Provincia not found on :: " + provinciaId));
-		return provincia;
-	}
 }
