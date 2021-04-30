@@ -54,7 +54,7 @@ public class UsuarioService {
 		return usuarioRepository.save(usuario);
 	}
 
-	// DA DE ALTA UN NUEVO USUARIO
+	// DAR DE ALTA UN NUEVO USUARIO
 	public Usuario altaUsuario(Usuario usuario) throws ResourceNotFoundException {
 		Rol rol = rolService.getRolById(usuario.getRol().getId());
 		usuario.setRol(rol);
