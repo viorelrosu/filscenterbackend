@@ -31,10 +31,10 @@ public class LocalidadService {
 		return localidadRepository.findById(localidadId)
 				.orElseThrow(() -> new ResourceNotFoundException("Localidad not found on :: " + localidadId));
 	}
-	
+
 	// DEVUELVE UNA LOCALIDAD POR NOMBRE Y PROVINCIA
 	public Localidad getLocalidadByByNombreAndProvinciaId(String nombre, Long provinciaId) {
-		return localidadRepository.findOneByNombreAndProvinciaId(nombre,provinciaId);
+		return localidadRepository.findOneByNombreAndProvinciaId(nombre, provinciaId);
 	}
 
 	// CREA UNA NUEVA LOCALIDAD
@@ -65,6 +65,11 @@ public class LocalidadService {
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
+	}
+
+	// DEVUELVE UNA LISTA DE LOCALIDADES CORRESPONDIENTES A UNA PROVINCIA
+	public List<Localidad> getLocalidadesByProvincia(Long provinciaId) throws ResourceNotFoundException {
+		return (List<Localidad>) provinciaService.getProvinciaById(provinciaId).getLocalidades();
 	}
 
 }
