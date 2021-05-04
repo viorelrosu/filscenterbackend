@@ -63,5 +63,12 @@ public class EjercicioSerieRESTController {
 			throws Exception {
 		return ejercicioSerieService.deleteEjercicioSerie(ejercicioSerieId);
 	}
+	
+	//RECUPERAR EJERCICIOS POR TABLA ID
+    @GetMapping("/ejercicioSerieTabla/{id}")
+    public List<EjercicioSerie> getEjerciciosSerieByTablaId(@PathVariable(value = "id") Long tablaEjercicioId)
+            throws ResourceNotFoundException {
+        return ejercicioSerieService.getEjerciciosSerieByTablaEjercicio(tablaEjercicioId);
+    }
 
 }

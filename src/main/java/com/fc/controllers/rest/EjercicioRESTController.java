@@ -61,5 +61,11 @@ public class EjercicioRESTController {
 	public Map<String, Boolean> deleteEjercicio(@PathVariable(value = "id") Long ejercicioId) throws Exception {
 		return ejercicioService.deleteEjercicio(ejercicioId);
 	}
+	
+	// DEVUELVE UNA LISTA DE EJERCICIOS CORRESPONDIENTES A UN TIPOEJERCICIO
+	@GetMapping("/ejercicios/{id}")
+		public List<Ejercicio> getEjerciciosByTipoEjercicios(Long tipoEjercicioId) throws ResourceNotFoundException {
+		return ejercicioService.getEjerciciosByTipoEJercicio(tipoEjercicioId);
+		}
 
 }

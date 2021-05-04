@@ -85,4 +85,9 @@ public class EjercicioSerieService {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
+
+	// DEVUELVE UNA LISTA DE LOCALIDADES CORRESPONDIENTES A UNA PROVINCIA
+	public List<EjercicioSerie> getEjerciciosSerieByTablaEjercicio(Long tablaEjercicioId) throws ResourceNotFoundException {
+		return (List<EjercicioSerie>) tablaEjercicioService.getTablaEjercicioById(tablaEjercicioId).getEjercicioSeries();
+	}
 }

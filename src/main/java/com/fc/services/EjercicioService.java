@@ -61,4 +61,9 @@ public class EjercicioService {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
+
+	// LISTAR EJERCICIOS DE UN MISMO TIPO
+	public List<Ejercicio> getEjerciciosByTipoEJercicio(Long tipoEjercicioId) throws ResourceNotFoundException {
+		return (List<Ejercicio>) tipoEjercicioService.getTipoEjercicioById(tipoEjercicioId).getEjercicios();
+	}
 }
