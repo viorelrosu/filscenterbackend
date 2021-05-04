@@ -79,6 +79,9 @@ public class UsuarioService {
 		usuario.setFechaNacimiento(usuarioDetails.getFechaNacimiento());
 		usuario.setCuentaBancaria(usuarioDetails.getCuentaBancaria());
 		usuario.setBiografia(usuarioDetails.getBiografia());
+		Direccion direccion = usuario.getDireccion();
+		direccion = direccionService.updateDireccion(direccion.getId(), usuarioDetails.getDireccion());
+		usuario.setDireccion(direccion);
 		Rol rol = usuario.getRol();
 		rol.getUsuarios().remove(usuario);
 		rol = rolService.getRolById(usuarioDetails.getRol().getId());
