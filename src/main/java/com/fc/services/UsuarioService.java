@@ -102,6 +102,14 @@ public class UsuarioService {
 	// BORRAR UN USUARIO
 	public Map<String, Boolean> deleteUsuario(Long usuarioId) throws Exception {
 		Usuario usuario = getUsuarioById(usuarioId);
+		List<Usuario> usuarios =(List<Usuario>) usuario.getRol().getUsuarios();
+		usuarios.remove(usuario);
+		usuario.getRol().setUsuarios(usuarios);
+		if(usuario.getTaquilla()!=null) {
+		usuarios = (List<Usuario>) usuario.getTaquilla().getUsuarios();
+		usuarios.remove(usuario);
+		usuario.getTaquilla().setUsuarios(usuarios);
+		}
 		usuarioRepository.delete(usuario);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);

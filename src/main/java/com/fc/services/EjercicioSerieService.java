@@ -80,6 +80,12 @@ public class EjercicioSerieService {
 	@DeleteMapping("/ejercicioSerie/{id}")
 	public Map<String, Boolean> deleteEjercicioSerie(Long ejercicioSerieId) throws Exception {
 		EjercicioSerie ejercicioSerie = getEjercicioSerieById(ejercicioSerieId);
+		List<EjercicioSerie> ejercicioSeries =(List<EjercicioSerie>) ejercicioSerie.getEjercicio().getEjercicioSeries();
+		ejercicioSeries.remove(ejercicioSerie);
+		ejercicioSerie.getEjercicio().setEjercicioSeries(ejercicioSeries);
+		ejercicioSeries = (List<EjercicioSerie>) ejercicioSerie.getTablaEjercicio().getEjercicioSeries();
+		ejercicioSeries.remove(ejercicioSerie);
+		ejercicioSerie.getTablaEjercicio().setEjercicioSeries(ejercicioSeries);
 		ejercicioSerieRepository.delete(ejercicioSerie);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);

@@ -99,6 +99,7 @@ public class TablaEjercicio {
 	public void setSuscriptor(Usuario suscriptor) {
 		this.suscriptor = suscriptor;
 	}
+	
 
 	// ===============================================================
 
