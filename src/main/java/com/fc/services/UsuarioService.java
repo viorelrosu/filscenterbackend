@@ -80,6 +80,7 @@ public class UsuarioService {
 		usuario.setFechaNacimiento(usuarioDetails.getFechaNacimiento());
 		usuario.setCuentaBancaria(usuarioDetails.getCuentaBancaria());
 		usuario.setBiografia(usuarioDetails.getBiografia());
+		usuario.setImagen(usuarioDetails.getImagen());
 		Direccion direccion = usuario.getDireccion();
 		direccion = direccionService.updateDireccion(direccion.getId(), usuarioDetails.getDireccion());
 		usuario.setDireccion(direccion);
@@ -102,15 +103,19 @@ public class UsuarioService {
 	// BORRAR UN USUARIO
 	public Map<String, Boolean> deleteUsuario(Long usuarioId) throws Exception {
 		Usuario usuario = getUsuarioById(usuarioId);
-		List<Usuario> usuarios =(List<Usuario>) usuario.getRol().getUsuarios();
+		List<Usuario> usuarios = (List<Usuario>) usuario.getRol().getUsuarios();
 		usuarios.remove(usuario);
 		usuario.getRol().setUsuarios(usuarios);
-		if(usuario.getTaquilla()!=null) {
-		usuarios = (List<Usuario>) usuario.getTaquilla().getUsuarios();
-		usuarios.remove(usuario);
-		usuario.getTaquilla().setUsuarios(usuarios);
+		if (usuario.getTaquilla() != null) {
+			usuarios = (List<Usuario>) usuario.getTaquilla().getUsuarios();
+			usuarios.remove(usuario);
+			usuario.getTaquilla().setUsuarios(usuarios);
 		}
+		Direccion direccion = usuario.getDireccion();
+		direccion.setUsuario(null);
+		usuario.setDireccion(null);
 		usuarioRepository.delete(usuario);
+		direccionService.deleteDireccion(direccion.getId());
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
@@ -121,18 +126,23 @@ public class UsuarioService {
 		Usuario usuario = getUsuarioById(id);
 		String password = cadenaAleatoria(15);
 		usuario.setPassword(password);
-		updateUsuario(id,usuario);
+		updateUsuario(id, usuario);
 		return password;
 	}
-	
+
 	public static String cadenaAleatoria(int longitud) {
-	    String banco = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-	    String cadena = "";
-	    for (int x = 0; x < longitud; x++) {
-	        int indiceAleatorio = ThreadLocalRandom.current().nextInt(0, banco.length() - 1);
-	        char caracterAleatorio = banco.charAt(indiceAleatorio);
-	        cadena += caracterAleatorio;
-	    }
-	    return cadena;
+		String banco = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		String cadena = "";
+		for (int x = 0; x < longitud; x++) {
+			int indiceAleatorio = ThreadLocalRandom.current().nextInt(0, banco.length() - 1);
+			char caracterAleatorio = banco.charAt(indiceAleatorio);
+			cadena += caracterAleatorio;
+		}
+		return cadena;
+	}
+
+	// DEVUELVE UNA LISTA DE USUARIOS CORRESPONDIENTES A UN ROL
+	public List<Usuario> getUsuariosByRol(Long usuarioId) throws ResourceNotFoundException {
+		return (List<Usuario>) rolService.getRolById(usuarioId).getUsuarios();
 	}
 }

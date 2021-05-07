@@ -45,6 +45,7 @@ public class ActividadService {
 		actividad.setNombre(actividadDetails.getNombre());
 		actividad.setDescripcion(actividadDetails.getDescripcion());
 		actividad.setDificultad(actividadDetails.getDificultad());
+		actividad.setColor(actividadDetails.getColor());
 		TipoActividad tipoActividad = actividad.getTipoActividad();
 		tipoActividad.getActividades().remove(actividad);
 		tipoActividad = tipoActividadService.getTipoActividadById(actividadDetails.getTipoActividad().getId());

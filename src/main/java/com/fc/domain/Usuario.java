@@ -49,6 +49,8 @@ public class Usuario {
 
 	@Column(nullable = true)
 	private String biografia;
+	
+	private String imagen;
 
 	@ManyToOne
 	private Rol rol;
@@ -132,6 +134,14 @@ public class Usuario {
 
 	public void setDni(String dni) {
 		this.dni = dni;
+	}
+
+	public String getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
 	}
 
 	public String getEmail() {
@@ -262,10 +272,10 @@ public class Usuario {
 		return "Usuario [id=" + id + ", password=" + password + ", nombre=" + nombre + ", apellidos=" + apellidos
 				+ ", dni=" + dni + ", email=" + email + ", telefono=" + telefono + ", fechaNacimiento="
 				+ fechaNacimiento + ", cuentaBancaria=" + cuentaBancaria + ", numeroTarjeta=" + numeroTarjeta
-				+ ", biografia=" + biografia + ", rol=" + rol + ", taquilla=" + taquilla + ", suscripciones="
-				+ suscripciones + ", direccion=" + direccion + ", facturas=" + facturas + ", slots=" + slots
-				+ ", reservas=" + reservas + ", tablasEjercicioSuscriptor=" + tablasEjercicioSuscriptor
-				+ ", tablasEjercicioMonitor=" + tablasEjercicioMonitor + "]";
+				+ ", biografia=" + biografia + ", imagen=" + imagen + ", rol=" + rol + ", taquilla=" + taquilla
+				+ ", suscripciones=" + suscripciones + ", direccion=" + direccion + ", facturas=" + facturas
+				+ ", slots=" + slots + ", reservas=" + reservas + ", tablasEjercicioSuscriptor="
+				+ tablasEjercicioSuscriptor + ", tablasEjercicioMonitor=" + tablasEjercicioMonitor + "]";
 	}
 
 }

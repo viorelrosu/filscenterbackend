@@ -54,9 +54,9 @@ public class LocalidadRESTController {
 
 	// LISTAR PROVINCIAS EN UNA LOCALIDAD
 	@GetMapping("/localidades/{id}")
-		public List<Localidad> getLocalidadesByProvincia(@PathVariable(value = "id") Long provinciaId) throws ResourceNotFoundException {
-			return localidadService.getLocalidadesByProvincia(provinciaId);
-		}
-	
-	
+	public List<Localidad> getLocalidadesByProvincia(@PathVariable(value = "id") Long provinciaId)
+			throws ResourceNotFoundException {
+		return localidadService.getLocalidadesByProvincia(provinciaId);
+	}
+
 }

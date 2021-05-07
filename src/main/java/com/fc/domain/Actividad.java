@@ -22,8 +22,13 @@ public class Actividad {
 	@NotEmpty
 	private String nombre;
 
+	@Lob
+	@Column(columnDefinition="TEXT")
 	@NotEmpty
 	private String descripcion;
+	
+	@NotEmpty
+	private String color;
 
 	@NotEmpty
 	private Integer dificultad;
@@ -83,6 +88,15 @@ public class Actividad {
 	public Collection<Slot> getSlots() {
 		return slots;
 	}
+	
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
 
 	public void setSlots(Collection<Slot> slots) {
 		this.slots = slots;
@@ -93,8 +107,8 @@ public class Actividad {
 
 	@Override
 	public String toString() {
-		return "Actividad [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", dificultad="
-				+ dificultad + ", tipoActividad=" + tipoActividad + ", slots=" + slots + "]";
+		return "Actividad [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", color=" + color
+				+ ", dificultad=" + dificultad + ", tipoActividad=" + tipoActividad + ", slots=" + slots + "]";
 	}
 
 }

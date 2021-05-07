@@ -95,6 +95,14 @@ public class DireccionService {
 	// BORRAR UNA DIRECCION
 	public Map<String, Boolean> deleteDireccion(Long direccionId) throws Exception {
 		Direccion direccion = getDireccionById(direccionId);
+		if(direccion.getUsuario()!=null) {
+			direccion.getUsuario().setDireccion(null);
+			direccion.setUsuario(null);
+		}
+		List<Direccion> direcciones =(List<Direccion>) direccion.getLocalidad().getDirecciones();
+		direcciones.remove(direccion);
+		direccion.getLocalidad().setDirecciones(direcciones);
+		direccion.setLocalidad(null);
 		direccionRepository.delete(direccion);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
