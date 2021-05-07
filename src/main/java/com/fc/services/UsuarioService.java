@@ -3,6 +3,7 @@ package com.fc.services;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -105,5 +106,25 @@ public class UsuarioService {
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
+	}
+
+	// ASIGNA UNA PASSWORD ALEATORIA A UN USUARIO
+	public String resetPassword(Long id) throws ResourceNotFoundException {
+		Usuario usuario = getUsuarioById(id);
+		String password = cadenaAleatoria(15);
+		usuario.setPassword(password);
+		updateUsuario(id,usuario);
+		return password;
+	}
+	
+	public static String cadenaAleatoria(int longitud) {
+	    String banco = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+	    String cadena = "";
+	    for (int x = 0; x < longitud; x++) {
+	        int indiceAleatorio = ThreadLocalRandom.current().nextInt(0, banco.length() - 1);
+	        char caracterAleatorio = banco.charAt(indiceAleatorio);
+	        cadena += caracterAleatorio;
+	    }
+	    return cadena;
 	}
 }
