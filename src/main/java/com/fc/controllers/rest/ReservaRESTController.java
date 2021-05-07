@@ -61,15 +61,23 @@ public class ReservaRESTController {
 		return reservaService.deleteReserva(reservaId);
 	}
 
+	// LISTAR RESERVA POR USUARIO Y SLOT
+	@GetMapping("/reserva/slot/{slotId}/usuario/{usuarioId}")
+	public List<Reserva> getReservasBySlotAndUsuario(@PathVariable(value = "slotId") Long slotId,
+			@PathVariable(value = "usuarioId") Long usuarioId) throws ResourceNotFoundException {
+		return reservaService.getReservasBySlotAndUsuario(slotId, usuarioId);
+	}
+
 	// LISTAR RESERVAS EN UN SLOT
 	@GetMapping("/reserva/slot/{id}")
 	public List<Reserva> getReservasBySlot(@PathVariable(value = "id") Long slotId) throws ResourceNotFoundException {
 		return reservaService.getReservasBySlot(slotId);
 	}
 
-	// LISTAR RESERVAS EN UN SLOT
+	// LISTAR RESERVAS EN UN USUARIO
 	@GetMapping("/reserva/usuario/{id}")
-	public List<Reserva> getReservasByUsuario(@PathVariable(value = "id") Long usuarioId) throws ResourceNotFoundException {
+	public List<Reserva> getReservasByUsuario(@PathVariable(value = "id") Long usuarioId)
+			throws ResourceNotFoundException {
 		return reservaService.getReservasByUsuario(usuarioId);
 	}
 
