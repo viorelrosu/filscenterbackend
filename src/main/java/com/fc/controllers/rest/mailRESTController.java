@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fc.domain.ContactForm;
+import com.fc.exceptions.ResourceNotFoundException;
 import com.fc.services.MailService;
 
 @RestController
@@ -20,9 +21,16 @@ public class mailRESTController {
 	@Autowired
 	MailService mailService;
 	
+	// ENVIA UN EMAIL A LA CUENTA DE FILSCENTER CON EL CORREO DEL CONTACTO Y SU MENSAJE
 	@PostMapping("/contactForm")
 	public void contactMail(@RequestBody ContactForm contactForm) {
 		mailService.contactMail(contactForm.getFrom(), contactForm.getSubject(), contactForm.getText());
+	}
+	
+	// CAMBIA LA CONTRASEÑA DEL USUARIO A UNA ALEATORIA Y SE LA ENVIAL POR EMAIL
+	@PostMapping("/resetPassword")
+	public void resetPassword(@RequestBody String email) throws ResourceNotFoundException {
+		mailService.resetPassword(email);
 	}
 
 }

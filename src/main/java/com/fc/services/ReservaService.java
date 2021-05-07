@@ -74,4 +74,14 @@ public class ReservaService {
 		return response;
 	}
 
+	// DEVUELVE UNA LISTA DE RESERVAS CORRESPONDIENTES A UN SLOT
+	public List<Reserva> getReservasBySlot(Long slotId) throws ResourceNotFoundException {
+		return (List<Reserva>) slotService.getSlotById(slotId).getReservas();
+	}
+
+	// DEVUELVE UNA LISTA DE RESERVAS CORRESPONDIENTES A UN SLOT
+	public List<Reserva> getReservasByUsuario(Long usuarioId) throws ResourceNotFoundException {
+		return (List<Reserva>) usuarioService.getUsuarioById(usuarioId).getReservas();
+	}
+
 }
