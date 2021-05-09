@@ -12,7 +12,6 @@ import com.fc.domain.Usuario;
 import com.fc.exceptions.ResourceNotFoundException;
 import com.fc.repositories.FacturaRepository;
 
-
 @Service
 public class FacturaService {
 
@@ -57,6 +56,10 @@ public class FacturaService {
 	// BORRAR UNA FACTURA
 	public Map<String, Boolean> deleteFactura(Long facturaId) throws Exception {
 		Factura factura = getFacturaById(facturaId);
+		List<Factura> facturas = (List<Factura>) factura.getUsuario().getFacturas();
+		facturas.remove(factura);
+		factura.getUsuario().setFacturas(facturas);
+		factura.setUsuario(null);
 		facturaRepository.delete(factura);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);

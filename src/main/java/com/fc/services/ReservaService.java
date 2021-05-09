@@ -68,6 +68,14 @@ public class ReservaService {
 	// BORRAR
 	public Map<String, Boolean> deleteReserva(Long reservaId) throws Exception {
 		Reserva reserva = getReservaById(reservaId);
+		List<Reserva> reservas = (List<Reserva>) reserva.getSlot().getReservas();
+		reservas.remove(reserva);
+		reserva.getUsuario().setReservas(reservas);
+		reserva.setUsuario(null);
+		reservas = (List<Reserva>) reserva.getSlot().getReservas();
+		reservas.remove(reserva);
+		reserva.getSlot().setReservas(reservas);
+		reserva.setSlot(null);
 		reservaRepository.delete(reserva);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
@@ -86,7 +94,7 @@ public class ReservaService {
 
 	// DEVUELVE UNA LISTA DE RESERVAS CORRESPONDIENTES A UN USUARIO Y UN SLOT
 	public List<Reserva> getReservasBySlotAndUsuario(Long slotId, Long usuarioId) {
-		return reservaRepository.findBySlotIdAndUsuarioId(slotId,usuarioId);
+		return reservaRepository.findBySlotIdAndUsuarioId(slotId, usuarioId);
 	}
 
 }

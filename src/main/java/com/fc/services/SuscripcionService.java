@@ -66,6 +66,14 @@ public class SuscripcionService {
 	// BORRAR UNA SUSCRIPCION
 	public Map<String, Boolean> deleteSuscripcion(Long suscripcionId) throws Exception {
 		Suscripcion suscripcion = getSuscripcionById(suscripcionId);
+		List<Suscripcion> suscripciones = (List<Suscripcion>) suscripcion.getUsuario().getSuscripciones();
+		suscripciones.remove(suscripcion);
+		suscripcion.getUsuario().setSuscripciones(suscripciones);
+		suscripcion.setUsuario(null);
+		suscripciones = (List<Suscripcion>) suscripcion.getTipoSuscripcion().getSuscripciones();
+		suscripciones.remove(suscripcion);
+		suscripcion.getTipoSuscripcion().setSuscripciones(suscripciones);
+		suscripcion.setTipoSuscripcion(null);
 		suscripcionRepository.delete(suscripcion);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);

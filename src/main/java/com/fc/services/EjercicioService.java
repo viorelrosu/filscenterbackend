@@ -56,6 +56,10 @@ public class EjercicioService {
 	// BORRAR UN EJERCICIO
 	public Map<String, Boolean> deleteEjercicio(Long ejercicioId) throws Exception {
 		Ejercicio ejercicio = getEjercicioById(ejercicioId);
+		List<Ejercicio> ejercicios = (List<Ejercicio>) ejercicio.getTipoEjercicio().getEjercicios();
+		ejercicios.remove(ejercicio);
+		ejercicio.getTipoEjercicio().setEjercicios(ejercicios);
+		ejercicio.setTipoEjercicio(null);
 		ejercicioRepository.delete(ejercicio);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);

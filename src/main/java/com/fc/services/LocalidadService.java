@@ -61,6 +61,10 @@ public class LocalidadService {
 	// BORRAR UNA LOCALIDAD
 	public Map<String, Boolean> deleteLocalidad(Long localidadId) throws Exception {
 		Localidad localidad = getLocalidadById(localidadId);
+		List<Localidad> localidades = (List<Localidad>) localidad.getProvincia().getLocalidades();
+		localidades.remove(localidad);
+		localidad.getProvincia().setLocalidades(localidades);
+		localidad.setProvincia(null);
 		localidadRepository.delete(localidad);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);

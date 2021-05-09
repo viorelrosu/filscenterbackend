@@ -68,6 +68,15 @@ public class TablaEjercicioService {
 	// BORRAR UNA TABLAEJERCICIO
 	public Map<String, Boolean> deleteTablaEjercicio(Long tablaEjercicioId) throws Exception {
 		TablaEjercicio tablaEjercicio = getTablaEjercicioById(tablaEjercicioId);
+		List<TablaEjercicio> tablaEjercicios = (List<TablaEjercicio>) tablaEjercicio.getMonitor()
+				.getTablasEjercicioMonitor();
+		tablaEjercicios.remove(tablaEjercicio);
+		tablaEjercicio.getMonitor().setTablasEjercicioMonitor(tablaEjercicios);
+		tablaEjercicio.setMonitor(null);
+		tablaEjercicios = (List<TablaEjercicio>) tablaEjercicio.getSuscriptor().getTablasEjercicioSuscriptor();
+		tablaEjercicios.remove(tablaEjercicio);
+		tablaEjercicio.getSuscriptor().setTablasEjercicioSuscriptor(tablaEjercicios);
+		tablaEjercicio.setSuscriptor(null);
 		tablaEjercicioRepository.delete(tablaEjercicio);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);

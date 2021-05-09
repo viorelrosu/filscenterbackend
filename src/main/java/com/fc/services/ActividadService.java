@@ -58,6 +58,9 @@ public class ActividadService {
 	// BORRAR UNA ACTIVIDAD
 	public Map<String, Boolean> deleteActividad(Long actividadId) throws Exception {
 		Actividad actividad = getActividadById(actividadId);
+		List<Actividad> actividades = (List<Actividad>) actividad.getTipoActividad().getActividades();
+		actividades.remove(actividad);
+		actividad.getTipoActividad().setActividades(actividades);
 		actividadRepository.delete(actividad);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);

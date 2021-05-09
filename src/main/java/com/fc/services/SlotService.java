@@ -80,6 +80,18 @@ public class SlotService {
 	// BORRAR UN ROL
 	public Map<String, Boolean> deleteSlot(Long slotId) throws Exception {
 		Slot slot = getSlotById(slotId);
+		List<Slot> slots = (List<Slot>) slot.getSala().getSlots();
+		slots.remove(slot);
+		slot.getSala().setSlots(slots);
+		slot.setSala(null);
+		slots = (List<Slot>) slot.getActividad().getSlots();
+		slots.remove(slot);
+		slot.getActividad().setSlots(slots);
+		slot.setActividad(null);
+		slots = (List<Slot>) slot.getMonitor().getSlots();
+		slots.remove(slot);
+		slot.getMonitor().setSlots(slots);
+		slot.setMonitor(null);
 		slotRepository.delete(slot);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
