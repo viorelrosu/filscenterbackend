@@ -79,4 +79,9 @@ public class SuscripcionService {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
+
+	// DEVUELVE UNA LISTA DE SUSCRIPCIONES DE UN USUARIO
+	public List<Suscripcion> getSuscripcionesByUsuario(Long usuarioId) throws ResourceNotFoundException {
+		return (List<Suscripcion>) usuarioService.getUsuarioById(usuarioId).getSuscripciones();
+	}
 }

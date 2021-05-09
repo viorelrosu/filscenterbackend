@@ -62,5 +62,12 @@ public class SuscripcionRESTController {
 	public Map<String, Boolean> deleteSuscripcion(@PathVariable(value = "id") Long suscripcionId) throws Exception {
 		return suscripcionService.deleteSuscripcion(suscripcionId);
 	}
+	
+	// LISTAR SUSCRIPCIONES POR USUARIO
+	@GetMapping("/suscripcion/usuario/{id}")
+	public List<Suscripcion> getSuscripcionesByUsuario(@PathVariable(value = "id") Long usuarioId)
+			throws ResourceNotFoundException {
+		return suscripcionService.getSuscripcionesByUsuario(usuarioId);
+	}
 
 }
