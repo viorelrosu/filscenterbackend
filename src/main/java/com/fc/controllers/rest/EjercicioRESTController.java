@@ -63,7 +63,7 @@ public class EjercicioRESTController {
 	}
 	
 	// DEVUELVE UNA LISTA DE EJERCICIOS CORRESPONDIENTES A UN TIPOEJERCICIO
-	@GetMapping("/ejercicios/{id}")
+	@GetMapping("/ejercicios/tipoEjercicio/{id}")
 		public List<Ejercicio> getEjerciciosByTipoEjercicios(Long tipoEjercicioId) throws ResourceNotFoundException {
 		return ejercicioService.getEjerciciosByTipoEJercicio(tipoEjercicioId);
 		}

@@ -20,6 +20,8 @@ public class Suscripcion {
 	@Column(nullable=true)
 	private Date fechaBaja;
 	
+	private boolean recurrente;
+	
 	@ManyToOne
 	private TipoSuscripcion tipoSuscripcion;
 	
@@ -70,13 +72,23 @@ public class Suscripcion {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+	
+	public boolean isRecurrente() {
+		return recurrente;
+	}
+
+	public void setRecurrente(boolean recurrente) {
+		this.recurrente = recurrente;
+	}
+	
 
 	// ===============================================================
 	
+
 	@Override
 	public String toString() {
-		return "Suscripcion [id=" + id + ", fechaAlta=" + fechaAlta + ", fechaBaja=" + fechaBaja + ", tipoSuscripcion="
-				+ tipoSuscripcion + ", usuario=" + usuario + "]";
+		return "Suscripcion [id=" + id + ", fechaAlta=" + fechaAlta + ", fechaBaja=" + fechaBaja + ", recurrente="
+				+ recurrente + ", tipoSuscripcion=" + tipoSuscripcion + ", usuario=" + usuario + "]";
 	}
 	
 }

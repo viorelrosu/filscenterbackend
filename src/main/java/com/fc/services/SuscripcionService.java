@@ -49,6 +49,7 @@ public class SuscripcionService {
 		Suscripcion suscripcion = getSuscripcionById(suscripcionId);
 		suscripcion.setFechaAlta(suscripcionDetails.getFechaAlta());
 		suscripcion.setFechaBaja(suscripcionDetails.getFechaBaja());
+		suscripcion.setRecurrente(suscripcionDetails.isRecurrente());
 		TipoSuscripcion tipoSuscripcion = suscripcion.getTipoSuscripcion();
 		tipoSuscripcion.getSuscripciones().remove(suscripcion);
 		tipoSuscripcion = tipoSuscripcionService.getTipoSuscripcionById(suscripcionDetails.getTipoSuscripcion().getId());

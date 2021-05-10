@@ -68,7 +68,7 @@ public class ReservaService {
 	// BORRAR
 	public Map<String, Boolean> deleteReserva(Long reservaId) throws Exception {
 		Reserva reserva = getReservaById(reservaId);
-		List<Reserva> reservas = (List<Reserva>) reserva.getSlot().getReservas();
+		List<Reserva> reservas = (List<Reserva>) reserva.getUsuario().getReservas();
 		reservas.remove(reserva);
 		reserva.getUsuario().setReservas(reservas);
 		reserva.setUsuario(null);
