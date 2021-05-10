@@ -133,7 +133,7 @@ public class UsuarioService {
 	    md.update(password.getBytes());
 	    byte[] digest = md.digest();
 	    String passwordHash = DatatypeConverter
-	      .printHexBinary(digest).toUpperCase();
+	      .printHexBinary(digest);
 		usuario.setPassword(passwordHash);
 		updateUsuario(id, usuario);
 		return password;
