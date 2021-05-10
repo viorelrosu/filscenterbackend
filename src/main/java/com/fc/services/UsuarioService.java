@@ -1,9 +1,13 @@
 package com.fc.services;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -122,10 +126,15 @@ public class UsuarioService {
 	}
 
 	// ASIGNA UNA PASSWORD ALEATORIA A UN USUARIO
-	public String resetPassword(Long id) throws ResourceNotFoundException {
+	public String resetPassword(Long id) throws ResourceNotFoundException, NoSuchAlgorithmException {
 		Usuario usuario = getUsuarioById(id);
 		String password = cadenaAleatoria(15);
-		usuario.setPassword(password);
+	    MessageDigest md = MessageDigest.getInstance("MD5");
+	    md.update(password.getBytes());
+	    byte[] digest = md.digest();
+	    String passwordHash = DatatypeConverter
+	      .printHexBinary(digest).toUpperCase();
+		usuario.setPassword(passwordHash);
 		updateUsuario(id, usuario);
 		return password;
 	}
