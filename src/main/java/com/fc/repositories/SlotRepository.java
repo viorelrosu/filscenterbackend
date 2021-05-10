@@ -9,6 +9,6 @@ import com.fc.domain.Slot;
 
 @Repository
 public interface SlotRepository extends JpaRepository<Slot, Long>{
-	public List<Slot> findBySalaIdAndUsuarioId(Long salaId, Long usuarioId);
+	public List<Slot> findBySalaIdAndMonitorId(Long salaId, Long usuarioId);
 	public List<Slot> findBySalaIdAndActividadId(Long salaId, Long actividadId);
 }

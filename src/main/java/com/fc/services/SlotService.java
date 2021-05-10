@@ -105,7 +105,7 @@ public class SlotService {
 
 	//DEVUELVE UNA LISTA DE SLOTS POR SALA Y USUARIO
 	public List<Slot> getSlotsBySalaAndUsuario(Long salaId, Long usuarioId) {
-		return slotRepository.findBySalaIdAndUsuarioId(salaId, usuarioId);
+		return slotRepository.findBySalaIdAndMonitorId(salaId, usuarioId);
 	}
 
 	//DEVUELVE UNA LISTA DE SLOTS POR SALA Y ACTIVIDAD

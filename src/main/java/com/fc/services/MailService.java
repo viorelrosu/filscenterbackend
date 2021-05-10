@@ -19,7 +19,7 @@ import com.fc.exceptions.ResourceNotFoundException;
 
 @Service
 public class MailService {
-	
+
 	@Autowired
 	UsuarioService usuarioService;
 
@@ -35,81 +35,82 @@ public class MailService {
 
 		// Setup mail server
 		properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
-        properties.put("mail.smtp.ssl.enable", "false");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.auth", "true");
-        
-     // Get the Session object.// and pass username and password
-        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+		properties.put("mail.smtp.port", "587");
+		properties.put("mail.smtp.ssl.enable", "false");
+		properties.put("mail.smtp.starttls.enable", "true");
+		properties.put("mail.smtp.auth", "true");
 
-            protected PasswordAuthentication getPasswordAuthentication() {
+		// Get the Session object.// and pass username and password
+		Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 
-                return new PasswordAuthentication(username, password);
+			protected PasswordAuthentication getPasswordAuthentication() {
 
-            }
+				return new PasswordAuthentication(username, password);
 
-        });
-		
-		 try {
-	            // Create a default MimeMessage object.
-	            MimeMessage message = new MimeMessage(session);
+			}
 
+		});
 
-	            // Set To: header field of the header.
-	            message.addRecipient(Message.RecipientType.TO, new InternetAddress(username));
+		try {
+			// Create a default MimeMessage object.
+			MimeMessage message = new MimeMessage(session);
 
-	            message.setSubject(subject);
+			// Set To: header field of the header.
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(username));
 
-	            message.setText("De: "+from+"\n\n"+text);
+			message.setSubject(subject);
 
-	            // Send message
-	            Transport.send(message);
+			message.setText("De: " + from + "\n\n" + text);
 
-	        } catch (MessagingException mex) {
-	            mex.printStackTrace();
-	        }
+			// Send message
+			Transport.send(message);
+
+		} catch (MessagingException mex) {
+			mex.printStackTrace();
+		}
 
 	}
-	
+
 	public void resetPassword(String to) throws ResourceNotFoundException, NoSuchAlgorithmException {
+		
+		System.out.println(to);
 
 		// Setup mail server
 		properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
-        properties.put("mail.smtp.ssl.enable", "false");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.auth", "true");
-        
-     // Get the Session object.// and pass username and password
-        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+		properties.put("mail.smtp.port", "587");
+		properties.put("mail.smtp.ssl.enable", "false");
+		properties.put("mail.smtp.starttls.enable", "true");
+		properties.put("mail.smtp.auth", "true");
 
-            protected PasswordAuthentication getPasswordAuthentication() {
+		// Get the Session object.// and pass username and password
+		Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 
-                return new PasswordAuthentication(username, password);
+			protected PasswordAuthentication getPasswordAuthentication() {
 
-            }
+				return new PasswordAuthentication(username, password);
 
-        });
-        
-		 try {
-	            // Create a default MimeMessage object.
-	            MimeMessage message = new MimeMessage(session);
+			}
 
+		});
 
-	            // Set To: header field of the header.
-	            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+		try {
+			// Create a default MimeMessage object.
+			MimeMessage message = new MimeMessage(session);
 
-	            message.setSubject("Reset Password");
+			// Set To: header field of the header.
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
-	            message.setText("Nueva contraseña: " + usuarioService.resetPassword(usuarioService.getUsuarioByEmail(to).getId()));
+			message.setSubject("Reset Password");
 
-	            // Send message
-	            Transport.send(message);
+			message.setText(
+					"Nueva contraseña: " + usuarioService.resetPassword(usuarioService.getUsuarioByEmail(to).getId()));
 
-	        } catch (MessagingException mex) {
-	            mex.printStackTrace();
-	        }
+			// Send message
+			Transport.send(message);
+
+		} catch (MessagingException mex) {
+			mex.printStackTrace();
+		}
 
 	}
 
