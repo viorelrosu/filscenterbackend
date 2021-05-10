@@ -65,4 +65,16 @@ public class TablaEjercicioRESTController {
 		return tablaEjercicioService.deleteTablaEjercicio(tablaEjercicioId);
 	}
 
+	// LISTAR TABLAS POR SUSCRIPTOR
+	@GetMapping("/tablaEjercicio/suscriptor/{id}")
+	public List<TablaEjercicio> getTablaEjercicioBySuscriptor(@PathVariable(value = "id") Long usuarioId) throws ResourceNotFoundException {
+		return tablaEjercicioService.getTablaEjerciciosBySuscriptor(usuarioId);
+	}
+	
+	// LISTAR TABLAS POR MONITOR
+		@GetMapping("/tablaEjercicio/monitor/{id}")
+		public List<TablaEjercicio> getTablaEjercicioByMonitor(@PathVariable(value = "id") Long usuarioId) throws ResourceNotFoundException {
+			return tablaEjercicioService.getTablaEjerciciosByMonitor(usuarioId);
+		}
+
 }

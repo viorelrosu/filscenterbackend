@@ -1,5 +1,7 @@
 package com.fc.controllers.rest;
 
+import java.security.NoSuchAlgorithmException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +31,7 @@ public class mailRESTController {
 	
 	// CAMBIA LA CONTRASEÑA DEL USUARIO A UNA ALEATORIA Y SE LA ENVIAL POR EMAIL
 	@PostMapping("/resetPassword")
-	public void resetPassword(@RequestBody String email) throws ResourceNotFoundException {
+	public void resetPassword(@RequestBody String email) throws ResourceNotFoundException, NoSuchAlgorithmException {
 		mailService.resetPassword(email);
 	}
 

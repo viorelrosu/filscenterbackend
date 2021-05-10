@@ -82,4 +82,14 @@ public class TablaEjercicioService {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
+
+	// DEVUELVE UNA TABLA DE EJERCICIOS POR MONITOR
+	public List<TablaEjercicio> getTablaEjerciciosByMonitor(Long usuarioId) throws ResourceNotFoundException {
+		return (List<TablaEjercicio>) usuarioService.getUsuarioById(usuarioId).getTablasEjercicioMonitor();
+	}
+
+	// DEVUELVE UNA TABLA DE EJERCICIOS POR SUSCRIPTOR
+	public List<TablaEjercicio> getTablaEjerciciosBySuscriptor(Long usuarioId) throws ResourceNotFoundException {
+		return (List<TablaEjercicio>) usuarioService.getUsuarioById(usuarioId).getTablasEjercicioSuscriptor();
+	}
 }

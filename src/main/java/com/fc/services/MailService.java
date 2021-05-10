@@ -1,5 +1,6 @@
 package com.fc.services;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -71,7 +72,7 @@ public class MailService {
 
 	}
 	
-	public void resetPassword(String to) throws ResourceNotFoundException {
+	public void resetPassword(String to) throws ResourceNotFoundException, NoSuchAlgorithmException {
 
 		// Setup mail server
 		properties.put("mail.smtp.host", "smtp.gmail.com");

@@ -98,4 +98,19 @@ public class SlotService {
 		return response;
 	}
 
+	//DEVUELVE UNA LISTA DE SLOTS POR SALA
+	public List<Slot> getSlotsBySala(Long salaId) throws ResourceNotFoundException {
+		return (List<Slot>) salaService.getSalaById(salaId).getSlots();
+	}
+
+	//DEVUELVE UNA LISTA DE SLOTS POR SALA Y USUARIO
+	public List<Slot> getSlotsBySalaAndUsuario(Long salaId, Long usuarioId) {
+		return slotRepository.findBySalaIdAndUsuarioId(salaId, usuarioId);
+	}
+
+	//DEVUELVE UNA LISTA DE SLOTS POR SALA Y ACTIVIDAD
+	public List<Slot> getSlotsBySalaAndActividad(Long salaId, Long actividadId) {
+		return slotRepository.findBySalaIdAndActividadId(salaId, actividadId);
+	}
+
 }

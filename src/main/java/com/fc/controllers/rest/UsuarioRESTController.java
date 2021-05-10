@@ -74,7 +74,7 @@ public class UsuarioRESTController {
 		return usuarioService.deleteUsuario(usuarioId);
 	}
 
-	// LISTAR PROVINCIAS EN UNA LOCALIDAD
+	// LISTAR UUSARIOS POR ROL
 	@GetMapping("/usuario/rol/{id}")
 	public List<Usuario> getUsuariosByRol(@PathVariable(value = "id") Long rolId) throws ResourceNotFoundException {
 		return usuarioService.getUsuariosByRol(rolId);

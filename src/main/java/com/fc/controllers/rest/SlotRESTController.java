@@ -61,4 +61,22 @@ public class SlotRESTController {
 		return slotService.deleteSlot(rolId);
 	}
 
+	// LISTAR SLOTS POR SALA
+	@GetMapping("/slot/sala/{id}")
+	public List<Slot> getSlotBySala(@PathVariable(value = "id") Long salaId) throws ResourceNotFoundException {
+		return slotService.getSlotsBySala(salaId);
+	}
+
+	// LISTAR SLOTS POR SALA Y USUARIO
+	@GetMapping("/slot/sala/{salaId}/usuario/{usuarioId}")
+	public List<Slot> getSlotBySalaAndUsuario(@PathVariable(value = "salaId") Long salaId, @PathVariable(value = "usuarioId") Long usuarioId) throws ResourceNotFoundException {
+		return slotService.getSlotsBySalaAndUsuario(salaId,usuarioId);
+	}
+
+	// LISTAR SLOTS POR SALA Y ACTIVIDAD
+	@GetMapping("/slot/sala/{salaId}/actividad/{actividadId}")
+	public List<Slot> getSlotBySalaAndActividad(@PathVariable(value = "id") Long salaId, @PathVariable(value = "actividadId") Long actividadId) throws ResourceNotFoundException {
+		return slotService.getSlotsBySalaAndActividad(salaId,actividadId);
+	}
+
 }
