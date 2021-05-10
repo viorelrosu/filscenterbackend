@@ -75,7 +75,7 @@ public class SlotRESTController {
 
 	// LISTAR SLOTS POR SALA Y ACTIVIDAD
 	@GetMapping("/slot/sala/{salaId}/actividad/{actividadId}")
-	public List<Slot> getSlotBySalaAndActividad(@PathVariable(value = "id") Long salaId, @PathVariable(value = "actividadId") Long actividadId) throws ResourceNotFoundException {
+	public List<Slot> getSlotBySalaAndActividad(@PathVariable(value = "salaId") Long salaId, @PathVariable(value = "actividadId") Long actividadId) throws ResourceNotFoundException {
 		return slotService.getSlotsBySalaAndActividad(salaId,actividadId);
 	}
 
