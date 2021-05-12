@@ -44,8 +44,8 @@ public class Usuario {
 	@Column(nullable = true)
 	private String cuentaBancaria;
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer numeroTarjeta;
+	@Column(unique=true)
+	private Long numeroTarjeta;
 
 	@Column(nullable = true)
 	private String biografia;
@@ -176,11 +176,11 @@ public class Usuario {
 		this.cuentaBancaria = cuentaBancaria;
 	}
 
-	public Integer getNumeroTarjeta() {
+	public Long getNumeroTarjeta() {
 		return numeroTarjeta;
 	}
 
-	public void setNumeroTarjeta(Integer numeroTarjeta) {
+	public void setNumeroTarjeta(Long numeroTarjeta) {
 		this.numeroTarjeta = numeroTarjeta;
 	}
 

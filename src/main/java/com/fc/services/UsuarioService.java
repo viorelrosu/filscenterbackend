@@ -67,6 +67,8 @@ public class UsuarioService {
 		Direccion direccion = usuario.getDireccion();
 		usuario.setDireccion(null);
 		usuario = usuarioRepository.save(usuario);
+		usuario.setNumeroTarjeta(usuario.getId());
+		usuario = usuarioRepository.save(usuario);
 		direccion.setUsuario(usuario);
 		direccionService.saveDireccion(direccion);
 		return getUsuarioById(usuario.getId());
