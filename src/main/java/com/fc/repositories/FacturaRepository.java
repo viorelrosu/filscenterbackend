@@ -7,5 +7,5 @@ import com.fc.domain.Factura;
 
 @Repository
 public interface FacturaRepository extends JpaRepository<Factura, Long>{
-    
+	public Factura findTopByOrderByIdDesc();
 }

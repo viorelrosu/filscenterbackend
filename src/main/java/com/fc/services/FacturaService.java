@@ -1,13 +1,16 @@
 package com.fc.services;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.fc.domain.Factura;
+import com.fc.domain.Suscripcion;
 import com.fc.domain.Usuario;
 import com.fc.exceptions.ResourceNotFoundException;
 import com.fc.repositories.FacturaRepository;
@@ -19,6 +22,8 @@ public class FacturaService {
 	private FacturaRepository facturaRepository;
 	@Autowired
 	private UsuarioService usuarioService;
+	@Autowired
+	private SuscripcionService suscripcionService;
 
 	// DEVUELVE TODAS LAS FACTURAS
 	public List<Factura> getFacturas() {
@@ -64,5 +69,33 @@ public class FacturaService {
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
+	}
+	
+	//CREA UNA FACTURA A PARTIR DE UNA SUSCRIPCION
+	public void cobrarSuscripcion(Suscripcion suscripcion) throws ResourceNotFoundException {
+		Factura factura = new Factura();
+		Usuario usuario = usuarioService.getUsuarioById(suscripcion.getUsuario().getId());
+		factura.setFecha(new Date());
+		factura.setImporte(suscripcion.getTipoSuscripcion().getTarifa());
+		factura.setPagado(false);
+		
+		Factura last = facturaRepository.findTopByOrderByIdDesc();
+		if(last!=null) {
+			factura.setNumero(last.getNumero()+1);
+		}else {
+			factura.setNumero(1L);
+		}
+		
+		usuario.getFacturas().add(factura);
+		factura.setUsuario(usuario);
+	}
+	
+	@Scheduled(cron = "0 0 2 1 * ?")
+	public void cobroMensual() throws ResourceNotFoundException {
+		for(Suscripcion suscripcion: suscripcionService.getSuscripciones()) {
+			if(suscripcion.isRecurrente()) {
+				cobrarSuscripcion(suscripcion);
+			}
+		}
 	}
 }

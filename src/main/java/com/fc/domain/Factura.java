@@ -19,8 +19,7 @@ public class Factura {
 	@NotEmpty
 	private Date fecha;
 
-	@NotEmpty
-	private Integer numero;
+	private Long numero;
 	
 	@NotEmpty
 	private Double importe;
@@ -50,11 +49,11 @@ public class Factura {
 		this.fecha = fecha;
 	}
 
-	public Integer getNumero() {
+	public Long getNumero() {
 		return numero;
 	}
 
-	public void setNumero(Integer numero) {
+	public void setNumero(Long numero) {
 		this.numero = numero;
 	}
 

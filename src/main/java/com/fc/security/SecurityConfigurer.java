@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.fc.security.domain.AuthEntryPointJwt;
 import com.fc.security.filters.AuthTokenFilter;
@@ -20,6 +21,7 @@ import com.fc.security.services.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
+@EnableScheduling
 @EnableGlobalMethodSecurity(
 		// securedEnabled = true,
 		// jsr250Enabled = true,

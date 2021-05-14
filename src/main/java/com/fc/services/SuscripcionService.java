@@ -23,6 +23,9 @@ public class SuscripcionService {
 	private TipoSuscripcionService tipoSuscripcionService;
 	
 	@Autowired
+	private FacturaService facturaService;
+	
+	@Autowired
 	private UsuarioService usuarioService;
 
 	// DEVUELVE TODAS LAS SUSCRIPCIONES
@@ -41,6 +44,7 @@ public class SuscripcionService {
 		TipoSuscripcion tipoSuscripcion = tipoSuscripcionService.getTipoSuscripcionById(suscripcion.getTipoSuscripcion().getId());
 		suscripcion.setTipoSuscripcion(tipoSuscripcion);
 		tipoSuscripcion.getSuscripciones().add(suscripcion);
+		facturaService.cobrarSuscripcion(suscripcion);
 		return suscripcionRepository.save(suscripcion);
 	}
 
