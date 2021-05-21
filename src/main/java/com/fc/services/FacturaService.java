@@ -70,30 +70,35 @@ public class FacturaService {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
-	
-	//CREA UNA FACTURA A PARTIR DE UNA SUSCRIPCION
+
+	// DEVUELVE UNA LISTA DE FACTURAS CORRESPONDIENTES A UN USUARIO
+	public List<Factura> getFacturasByUsuario(Long usuarioId) throws ResourceNotFoundException {
+		return (List<Factura>) usuarioService.getUsuarioById(usuarioId).getFacturas();
+	}
+
+	// CREA UNA FACTURA A PARTIR DE UNA SUSCRIPCION
 	public void cobrarSuscripcion(Suscripcion suscripcion) throws ResourceNotFoundException {
 		Factura factura = new Factura();
 		Usuario usuario = usuarioService.getUsuarioById(suscripcion.getUsuario().getId());
 		factura.setFecha(new Date());
 		factura.setImporte(suscripcion.getTipoSuscripcion().getTarifa());
 		factura.setPagado(false);
-		
+
 		Factura last = facturaRepository.findTopByOrderByIdDesc();
-		if(last!=null) {
-			factura.setNumero(last.getNumero()+1);
-		}else {
+		if (last != null) {
+			factura.setNumero(last.getNumero() + 1);
+		} else {
 			factura.setNumero(1L);
 		}
-		
+
 		usuario.getFacturas().add(factura);
 		factura.setUsuario(usuario);
 	}
-	
+
 	@Scheduled(cron = "0 0 2 1 * ?")
 	public void cobroMensual() throws ResourceNotFoundException {
-		for(Suscripcion suscripcion: suscripcionService.getSuscripciones()) {
-			if(suscripcion.isRecurrente()) {
+		for (Suscripcion suscripcion : suscripcionService.getSuscripciones()) {
+			if (suscripcion.isRecurrente()) {
 				cobrarSuscripcion(suscripcion);
 			}
 		}

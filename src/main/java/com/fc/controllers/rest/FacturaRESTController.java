@@ -61,4 +61,11 @@ public class FacturaRESTController {
 		return facturaService.deleteFactura(facturaId);
 	}
 
+	// LISTAR FACTURAS DE UN USUARIO
+	@GetMapping("/facturas/usuario/{id}")
+	public List<Factura> getFacturasByUsuario(@PathVariable(value = "id") Long usuarioId)
+			throws ResourceNotFoundException {
+		return facturaService.getFacturasByUsuario(usuarioId);
+	}
+
 }
