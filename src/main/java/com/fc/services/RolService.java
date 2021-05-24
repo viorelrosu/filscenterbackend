@@ -31,15 +31,23 @@ public class RolService {
 
 	// CREA UN NUEVO ROL
 	public Rol saveRol(Rol rol) {
-		return rolRepository.save(rol);
+		if (validarRol(rol)) {
+			return rolRepository.save(rol);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UN ROL
 	public Rol updateRol(Long rolId, Rol rolDetails) throws ResourceNotFoundException {
-		Rol rol = getRolById(rolId);
-		rol.setNombre(rolDetails.getNombre());
-		final Rol updatedRol = saveRol(rol);
-		return updatedRol;
+		if (validarRol(rolDetails)) {
+			Rol rol = getRolById(rolId);
+			rol.setNombre(rolDetails.getNombre());
+			final Rol updatedRol = saveRol(rol);
+			return updatedRol;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR UN ROL
@@ -49,5 +57,13 @@ public class RolService {
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
+	}
+
+	// VALIDAR
+	public boolean validarRol(Rol rol) {
+		if (rol.getNombre() != null && !rol.getNombre().contentEquals("")) {
+			return true;
+		}
+		return false;
 	}
 }

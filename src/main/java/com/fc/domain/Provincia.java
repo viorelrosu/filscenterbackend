@@ -2,7 +2,6 @@ package com.fc.domain;
 
 import java.util.Collection;
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -18,8 +17,6 @@ public class Provincia {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty
-	@NotNull
 	@Column(unique = true)
 	private String nombre;
 

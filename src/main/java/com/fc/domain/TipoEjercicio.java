@@ -3,7 +3,6 @@ package com.fc.domain;
 import java.util.Collection;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -20,7 +19,6 @@ public class TipoEjercicio {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty
 	private String nombre;
 
 	@JsonIgnore

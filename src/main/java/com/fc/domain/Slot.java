@@ -2,7 +2,6 @@ package com.fc.domain;
 
 import java.util.Collection;
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -19,13 +18,10 @@ public class Slot {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty
 	private String diaSemana;
 
-	@NotEmpty
 	private Integer horaInicio;
 
-	@NotEmpty
 	private Integer aforoActual;
 
 	@ManyToOne

@@ -31,15 +31,23 @@ public class ProvinciaService {
 
 	// CREA UNA NUEVA PROVINCIA
 	public Provincia saveProvincia(Provincia provincia) {
-		return provinciaRepository.save(provincia);
+		if (validarProvincia(provincia)) {
+			return provinciaRepository.save(provincia);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UNA PROVINCIA
 	public Provincia updateProvincia(Long provinciaId, Provincia provinciaDetails) throws ResourceNotFoundException {
-		Provincia provincia = getProvinciaById(provinciaId);
-		provincia.setNombre(provinciaDetails.getNombre());
-		final Provincia updatedProvincia = saveProvincia(provincia);
-		return updatedProvincia;
+		if (validarProvincia(provinciaDetails)) {
+			Provincia provincia = getProvinciaById(provinciaId);
+			provincia.setNombre(provinciaDetails.getNombre());
+			final Provincia updatedProvincia = saveProvincia(provincia);
+			return updatedProvincia;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR UNA PROVINCIA
@@ -49,5 +57,13 @@ public class ProvinciaService {
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
+	}
+
+	// VALIDAR
+	public boolean validarProvincia(Provincia provincia) {
+		if (provincia.getNombre() != null && !provincia.getNombre().contentEquals("")) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -1,7 +1,6 @@
 package com.fc.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -18,10 +17,8 @@ public class Direccion {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty
 	private String calle;
 
-	@NotEmpty
 	private Integer numero;
 
 	@Column(nullable = true)
@@ -36,10 +33,8 @@ public class Direccion {
 	@Column(nullable = true)
 	private String puerta;
 
-	@NotEmpty
 	private Integer codigoPostal;
 
-	@NotNull
 	@ManyToOne
 	private Localidad localidad;
 

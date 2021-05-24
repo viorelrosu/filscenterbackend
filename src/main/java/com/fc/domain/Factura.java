@@ -3,7 +3,6 @@ package com.fc.domain;
 import java.util.Date;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 
 @Entity
@@ -16,15 +15,12 @@ public class Factura {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty
 	private Date fecha;
 
 	private Long numero;
 	
-	@NotEmpty
 	private Double importe;
 
-	@NotNull
 	private Boolean pagado;
 
 	@ManyToOne

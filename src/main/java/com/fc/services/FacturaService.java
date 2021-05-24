@@ -39,23 +39,31 @@ public class FacturaService {
 
 	// CREA UNA NUEVA FACTURA
 	public Factura saveFactura(Factura factura) {
-		return facturaRepository.save(factura);
+		if (validarFactura(factura)) {
+			return facturaRepository.save(factura);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UNA FACTURA
 	public Factura updateFactura(Long facturaId, Factura facturaDetails) throws ResourceNotFoundException {
-		Factura factura = getFacturaById(facturaId);
-		factura.setFecha(facturaDetails.getFecha());
-		factura.setNumero(facturaDetails.getNumero());
-		factura.setImporte(facturaDetails.getImporte());
-		factura.setPagado(facturaDetails.getPagado());
-		Usuario usuario = factura.getUsuario();
-		usuario.getFacturas().remove(factura);
-		usuario = usuarioService.getUsuarioById(facturaDetails.getUsuario().getId());
-		factura.setUsuario(usuario);
-		usuario.getFacturas().add(factura);
-		final Factura updatedFactura = facturaRepository.save(factura);
-		return updatedFactura;
+		if (validarFactura(facturaDetails)) {
+			Factura factura = getFacturaById(facturaId);
+			factura.setFecha(facturaDetails.getFecha());
+			factura.setNumero(facturaDetails.getNumero());
+			factura.setImporte(facturaDetails.getImporte());
+			factura.setPagado(facturaDetails.getPagado());
+			Usuario usuario = factura.getUsuario();
+			usuario.getFacturas().remove(factura);
+			usuario = usuarioService.getUsuarioById(facturaDetails.getUsuario().getId());
+			factura.setUsuario(usuario);
+			usuario.getFacturas().add(factura);
+			final Factura updatedFactura = facturaRepository.save(factura);
+			return updatedFactura;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR UNA FACTURA
@@ -102,5 +110,21 @@ public class FacturaService {
 				cobrarSuscripcion(suscripcion);
 			}
 		}
+	}
+
+	// VALIDAR
+	public boolean validarFactura(Factura factura) {
+		if (factura.getFecha() != null) {
+			if (factura.getNumero() != null) {
+				if (factura.getImporte() != null) {
+					if (factura.getPagado() != null) {
+						if (factura.getUsuario() != null) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

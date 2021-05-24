@@ -3,7 +3,6 @@ package com.fc.domain;
 import java.util.Date;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "suscripcion")
@@ -14,7 +13,6 @@ public class Suscripcion {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty
 	private Date fechaAlta;
 
 	@Column(nullable=true)
@@ -74,6 +72,10 @@ public class Suscripcion {
 	}
 	
 	public boolean isRecurrente() {
+		return recurrente;
+	}
+	
+	public Boolean getRecurrente() {
 		return recurrente;
 	}
 

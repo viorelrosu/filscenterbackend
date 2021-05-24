@@ -31,16 +31,24 @@ public class TipoEjercicioService {
 
 	// CREA UN NUEVO TIPOEJERCICIO
 	public TipoEjercicio saveTipoEjercicio(TipoEjercicio tipoEjercicio) {
-		return tipoEjercicioRepository.save(tipoEjercicio);
+		if (validarTipoEjercicio(tipoEjercicio)) {
+			return tipoEjercicioRepository.save(tipoEjercicio);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UN TIPOEJERCICIO
 	public TipoEjercicio updateTipoEjercicio(Long tipoEjercicioId, TipoEjercicio tipoEjercicioDetails)
 			throws ResourceNotFoundException {
-		TipoEjercicio tipoEjercicio = getTipoEjercicioById(tipoEjercicioId);
-		tipoEjercicio.setNombre(tipoEjercicioDetails.getNombre());
-		final TipoEjercicio updatedTipoEjercicio = tipoEjercicioRepository.save(tipoEjercicio);
-		return updatedTipoEjercicio;
+		if (validarTipoEjercicio(tipoEjercicioDetails)) {
+			TipoEjercicio tipoEjercicio = getTipoEjercicioById(tipoEjercicioId);
+			tipoEjercicio.setNombre(tipoEjercicioDetails.getNombre());
+			final TipoEjercicio updatedTipoEjercicio = tipoEjercicioRepository.save(tipoEjercicio);
+			return updatedTipoEjercicio;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR UN TIPOEJERCICIO
@@ -52,4 +60,11 @@ public class TipoEjercicioService {
 		return response;
 	}
 
+	// VALIDAR
+	public boolean validarTipoEjercicio(TipoEjercicio tipoEjercicio) {
+		if (tipoEjercicio.getNombre() != null && !tipoEjercicio.getNombre().contentEquals("")) {
+			return true;
+		}
+		return false;
+	}
 }

@@ -21,10 +21,10 @@ public class SuscripcionService {
 
 	@Autowired
 	private TipoSuscripcionService tipoSuscripcionService;
-	
+
 	@Autowired
 	private FacturaService facturaService;
-	
+
 	@Autowired
 	private UsuarioService usuarioService;
 
@@ -41,31 +41,45 @@ public class SuscripcionService {
 
 	// CREA UNA NUEVA SUSCRIPCION
 	public Suscripcion saveSuscripcion(Suscripcion suscripcion) throws ResourceNotFoundException {
-		TipoSuscripcion tipoSuscripcion = tipoSuscripcionService.getTipoSuscripcionById(suscripcion.getTipoSuscripcion().getId());
-		suscripcion.setTipoSuscripcion(tipoSuscripcion);
-		tipoSuscripcion.getSuscripciones().add(suscripcion);
-		facturaService.cobrarSuscripcion(suscripcion);
-		return suscripcionRepository.save(suscripcion);
+		if (validarSuscripcion(suscripcion)) {
+			TipoSuscripcion tipoSuscripcion = tipoSuscripcionService
+					.getTipoSuscripcionById(suscripcion.getTipoSuscripcion().getId());
+			suscripcion.setTipoSuscripcion(tipoSuscripcion);
+			tipoSuscripcion.getSuscripciones().add(suscripcion);
+			Usuario usuario = usuarioService.getUsuarioById(suscripcion.getUsuario().getId());
+			suscripcion.setUsuario(usuario);
+			usuario.getSuscripciones().add(suscripcion);
+			facturaService.cobrarSuscripcion(suscripcion);
+			return suscripcionRepository.save(suscripcion);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UNA SUSCRIPCION
-	public Suscripcion updateSuscripcion(Long suscripcionId, Suscripcion suscripcionDetails) throws ResourceNotFoundException {
-		Suscripcion suscripcion = getSuscripcionById(suscripcionId);
-		suscripcion.setFechaAlta(suscripcionDetails.getFechaAlta());
-		suscripcion.setFechaBaja(suscripcionDetails.getFechaBaja());
-		suscripcion.setRecurrente(suscripcionDetails.isRecurrente());
-		TipoSuscripcion tipoSuscripcion = suscripcion.getTipoSuscripcion();
-		tipoSuscripcion.getSuscripciones().remove(suscripcion);
-		tipoSuscripcion = tipoSuscripcionService.getTipoSuscripcionById(suscripcionDetails.getTipoSuscripcion().getId());
-		suscripcion.setTipoSuscripcion(tipoSuscripcion);
-		tipoSuscripcion.getSuscripciones().add(suscripcion);
-		Usuario usuario = suscripcion.getUsuario();
-		usuario.getSuscripciones().remove(suscripcion);
-		usuario = usuarioService.getUsuarioById(suscripcionDetails.getUsuario().getId());
-		suscripcion.setUsuario(usuario);
-		usuario.getSuscripciones().add(suscripcion);
-		final Suscripcion updatedSuscripcion = suscripcionRepository.save(suscripcion);
-		return updatedSuscripcion;
+	public Suscripcion updateSuscripcion(Long suscripcionId, Suscripcion suscripcionDetails)
+			throws ResourceNotFoundException {
+		if (validarSuscripcion(suscripcionDetails)) {
+			Suscripcion suscripcion = getSuscripcionById(suscripcionId);
+			suscripcion.setFechaAlta(suscripcionDetails.getFechaAlta());
+			suscripcion.setFechaBaja(suscripcionDetails.getFechaBaja());
+			suscripcion.setRecurrente(suscripcionDetails.isRecurrente());
+			TipoSuscripcion tipoSuscripcion = suscripcion.getTipoSuscripcion();
+			tipoSuscripcion.getSuscripciones().remove(suscripcion);
+			tipoSuscripcion = tipoSuscripcionService
+					.getTipoSuscripcionById(suscripcionDetails.getTipoSuscripcion().getId());
+			suscripcion.setTipoSuscripcion(tipoSuscripcion);
+			tipoSuscripcion.getSuscripciones().add(suscripcion);
+			Usuario usuario = suscripcion.getUsuario();
+			usuario.getSuscripciones().remove(suscripcion);
+			usuario = usuarioService.getUsuarioById(suscripcionDetails.getUsuario().getId());
+			suscripcion.setUsuario(usuario);
+			usuario.getSuscripciones().add(suscripcion);
+			final Suscripcion updatedSuscripcion = suscripcionRepository.save(suscripcion);
+			return updatedSuscripcion;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR UNA SUSCRIPCION
@@ -88,5 +102,17 @@ public class SuscripcionService {
 	// DEVUELVE UNA LISTA DE SUSCRIPCIONES DE UN USUARIO
 	public List<Suscripcion> getSuscripcionesByUsuario(Long usuarioId) throws ResourceNotFoundException {
 		return (List<Suscripcion>) usuarioService.getUsuarioById(usuarioId).getSuscripciones();
+	}
+
+	// VALIDAR
+	public boolean validarSuscripcion(Suscripcion suscripcion) {
+		if (suscripcion.getFechaAlta() != null) {
+			if (suscripcion.getTipoSuscripcion() != null) {
+				if (suscripcion.getUsuario() != null) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

@@ -31,15 +31,23 @@ public class TaquillaService {
 
 	// CREA UNA NUEVA TAQUILLA
 	public Taquilla saveTaquilla(Taquilla taquilla) {
-		return taquillaRepository.save(taquilla);
+		if (validarTaquilla(taquilla)) {
+			return taquillaRepository.save(taquilla);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UNA TAQUILLA
 	public Taquilla updateTaquilla(Long taquillaId, Taquilla taquillaDetails) throws ResourceNotFoundException {
-		Taquilla taquilla = getTaquillaById(taquillaId);
-		taquilla.setNumero(taquillaDetails.getNumero());
-		final Taquilla updatedTaquilla = saveTaquilla(taquilla);
-		return updatedTaquilla;
+		if (validarTaquilla(taquillaDetails)) {
+			Taquilla taquilla = getTaquillaById(taquillaId);
+			taquilla.setNumero(taquillaDetails.getNumero());
+			final Taquilla updatedTaquilla = saveTaquilla(taquilla);
+			return updatedTaquilla;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR UNA TAQUILLA
@@ -49,5 +57,13 @@ public class TaquillaService {
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
+	}
+
+	// VALIDAR
+	public boolean validarTaquilla(Taquilla taquilla) {
+		if (taquilla.getNumero() != null) {
+			return true;
+		}
+		return false;
 	}
 }

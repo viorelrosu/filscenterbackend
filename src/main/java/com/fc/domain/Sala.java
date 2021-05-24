@@ -3,7 +3,6 @@ package com.fc.domain;
 import java.util.Collection;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -19,11 +18,9 @@ public class Sala {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotEmpty
 	@Column(unique=true)
 	private Integer numero;
 
-	@NotEmpty
 	private Integer aforoMax;
 	
 	@JsonIgnore

@@ -36,33 +36,40 @@ public class ReservaService {
 
 	// CREAR
 	public Reserva createReserva(Reserva reserva) throws ResourceNotFoundException {
-		Slot slot = slotService.getSlotById(reserva.getSlot().getId());
-		reserva.setSlot(slot);
-		slot.getReservas().add(reserva);
-		Usuario usuario = usuarioService.getUsuarioById(reserva.getUsuario().getId());
-		reserva.setUsuario(usuario);
-		usuario.getReservas().add(reserva);
-		return reservaRepository.save(reserva);
+		if (validarReserva(reserva)) {
+			Slot slot = slotService.getSlotById(reserva.getSlot().getId());
+			reserva.setSlot(slot);
+			slot.getReservas().add(reserva);
+			Usuario usuario = usuarioService.getUsuarioById(reserva.getUsuario().getId());
+			reserva.setUsuario(usuario);
+			usuario.getReservas().add(reserva);
+			return reservaRepository.save(reserva);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZAR
 	public Reserva updateReserva(Long reservaId, Reserva reservaDetails) throws ResourceNotFoundException {
-
-		Reserva reserva = getReservaById(reservaId);
-		reserva.setRecurrente(reservaDetails.getRecurrente());
-		reserva.setFechaInicio(reservaDetails.getFechaInicio());
-		Slot slot = reserva.getSlot();
-		slot.getReservas().remove(reserva);
-		slot = slotService.getSlotById(reservaDetails.getSlot().getId());
-		reserva.setSlot(slot);
-		slot.getReservas().add(reserva);
-		Usuario usuario = reserva.getUsuario();
-		usuario.getReservas().remove(reserva);
-		usuario = usuarioService.getUsuarioById(reservaDetails.getUsuario().getId());
-		reserva.setUsuario(usuario);
-		usuario.getReservas().add(reserva);
-		final Reserva updatedReserva = reservaRepository.save(reserva);
-		return updatedReserva;
+		if (validarReserva(reservaDetails)) {
+			Reserva reserva = getReservaById(reservaId);
+			reserva.setRecurrente(reservaDetails.getRecurrente());
+			reserva.setFechaInicio(reservaDetails.getFechaInicio());
+			Slot slot = reserva.getSlot();
+			slot.getReservas().remove(reserva);
+			slot = slotService.getSlotById(reservaDetails.getSlot().getId());
+			reserva.setSlot(slot);
+			slot.getReservas().add(reserva);
+			Usuario usuario = reserva.getUsuario();
+			usuario.getReservas().remove(reserva);
+			usuario = usuarioService.getUsuarioById(reservaDetails.getUsuario().getId());
+			reserva.setUsuario(usuario);
+			usuario.getReservas().add(reserva);
+			final Reserva updatedReserva = reservaRepository.save(reserva);
+			return updatedReserva;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR
@@ -95,6 +102,20 @@ public class ReservaService {
 	// DEVUELVE UNA LISTA DE RESERVAS CORRESPONDIENTES A UN USUARIO Y UN SLOT
 	public List<Reserva> getReservasBySlotAndUsuario(Long slotId, Long usuarioId) {
 		return reservaRepository.findBySlotIdAndUsuarioId(slotId, usuarioId);
+	}
+
+	// VALIDAR
+	public boolean validarReserva(Reserva reserva) {
+		if (reserva.getRecurrente() != null) {
+			if (reserva.getFechaInicio() != null) {
+				if (reserva.getUsuario() != null) {
+					if (reserva.getSlot() != null) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 }

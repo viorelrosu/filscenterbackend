@@ -39,67 +39,76 @@ public class DireccionService {
 
 	// CREA UNA NUEVA DIRECCION
 	public Direccion saveDireccion(Direccion direccion) throws ResourceNotFoundException {
-		Usuario usuario = usuarioService.getUsuarioById(direccion.getUsuario().getId());
-		if (usuario.getDireccion() == null) {
+		if (validarDireccion(direccion)) {
+			Usuario usuario = usuarioService.getUsuarioById(direccion.getUsuario().getId());
+			if (usuario.getDireccion() == null) {
+				Localidad localidad = localidadService.getLocalidadByByNombreAndProvinciaId(
+						direccion.getLocalidad().getNombre(), direccion.getLocalidad().getProvincia().getId());
+				if (localidad == null) {
+					localidad = new Localidad();
+					localidad.setNombre(direccion.getLocalidad().getNombre());
+					Provincia provincia = provinciaService
+							.getProvinciaById(direccion.getLocalidad().getProvincia().getId());
+					localidad.setProvincia(provincia);
+					localidad.setDirecciones(new ArrayList<Direccion>());
+					provincia.getLocalidades().add(localidad);
+					localidad = localidadService.saveLocalidad(localidad);
+				}
+				direccion.setUsuario(usuario);
+				direccion.setLocalidad(localidad);
+				usuario.setDireccion(direccion);
+				localidad.getDirecciones().add(direccion);
+				return direccionRepository.save(direccion);
+			} else {
+				return usuario.getDireccion();
+			}
+		} else {
+			return null;
+		}
+	}
+
+	// ACTUALIZA UNA DIRECCION
+	public Direccion updateDireccion(Long direccionId, Direccion direccionDetails) throws ResourceNotFoundException {
+		if (validarDireccion(direccionDetails)) {
+			Direccion direccion = getDireccionById(direccionId);
+			direccion.setCalle(direccionDetails.getCalle());
+			direccion.setNumero(direccionDetails.getNumero());
+			direccion.setBloque(direccionDetails.getBloque());
+			direccion.setEscalera(direccionDetails.getEscalera());
+			direccion.setPiso(direccionDetails.getPiso());
+			direccion.setPuerta(direccionDetails.getPuerta());
+			direccion.setCodigoPostal(direccionDetails.getCodigoPostal());
+
 			Localidad localidad = localidadService.getLocalidadByByNombreAndProvinciaId(
-					direccion.getLocalidad().getNombre(), direccion.getLocalidad().getProvincia().getId());
+					direccionDetails.getLocalidad().getNombre(),
+					direccionDetails.getLocalidad().getProvincia().getId());
 			if (localidad == null) {
 				localidad = new Localidad();
 				localidad.setNombre(direccion.getLocalidad().getNombre());
 				Provincia provincia = provinciaService
 						.getProvinciaById(direccion.getLocalidad().getProvincia().getId());
 				localidad.setProvincia(provincia);
-				localidad.setDirecciones(new ArrayList<Direccion>());
 				provincia.getLocalidades().add(localidad);
 				localidad = localidadService.saveLocalidad(localidad);
 			}
-			direccion.setUsuario(usuario);
-			direccion.setLocalidad(localidad);
-			usuario.setDireccion(direccion);
 			localidad.getDirecciones().add(direccion);
-			return direccionRepository.save(direccion);
+			direccion.setLocalidad(localidad);
+
+			final Direccion updatedDireccion = direccionRepository.save(direccion);
+			return updatedDireccion;
 		} else {
-			return usuario.getDireccion();
+			return null;
 		}
-	}
-
-	// ACTUALIZA UNA DIRECCION
-	public Direccion updateDireccion(Long direccionId, Direccion direccionDetails) throws ResourceNotFoundException {
-
-		Direccion direccion = getDireccionById(direccionId);
-		direccion.setCalle(direccionDetails.getCalle());
-		direccion.setNumero(direccionDetails.getNumero());
-		direccion.setBloque(direccionDetails.getBloque());
-		direccion.setEscalera(direccionDetails.getEscalera());
-		direccion.setPiso(direccionDetails.getPiso());
-		direccion.setPuerta(direccionDetails.getPuerta());
-		direccion.setCodigoPostal(direccionDetails.getCodigoPostal());
-
-		Localidad localidad = localidadService.getLocalidadByByNombreAndProvinciaId(
-				direccionDetails.getLocalidad().getNombre(), direccionDetails.getLocalidad().getProvincia().getId());
-		if (localidad == null) {
-			localidad = new Localidad();
-			localidad.setNombre(direccion.getLocalidad().getNombre());
-			Provincia provincia = provinciaService.getProvinciaById(direccion.getLocalidad().getProvincia().getId());
-			localidad.setProvincia(provincia);
-			provincia.getLocalidades().add(localidad);
-			localidad = localidadService.saveLocalidad(localidad);
-		}
-		localidad.getDirecciones().add(direccion);
-		direccion.setLocalidad(localidad);
-
-		final Direccion updatedDireccion = direccionRepository.save(direccion);
-		return updatedDireccion;
 	}
 
 	// BORRAR UNA DIRECCION
 	public Map<String, Boolean> deleteDireccion(Long direccionId) throws Exception {
 		Direccion direccion = getDireccionById(direccionId);
-		if(direccion.getUsuario()!=null) {
+		if (direccion.getUsuario() != null) {
 			direccion.getUsuario().setDireccion(null);
 			direccion.setUsuario(null);
 		}
-		List<Direccion> direcciones =(List<Direccion>) direccion.getLocalidad().getDirecciones();
+		List<Direccion> direcciones = (List<Direccion>) direccion.getLocalidad().getDirecciones();
 		direcciones.remove(direccion);
 		direccion.getLocalidad().setDirecciones(direcciones);
 		direccion.setLocalidad(null);
@@ -107,6 +116,25 @@ public class DireccionService {
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
+	}
+
+	// VALIDAR
+	public boolean validarDireccion(Direccion direccion) {
+		if (direccion.getCalle() != null && !direccion.getCalle().contentEquals("")) {
+			if (direccion.getNumero() != null) {
+				if (direccion.getCodigoPostal() != null) {
+					if (direccion.getLocalidad() != null && direccion.getLocalidad().getNombre() != null
+							&& !direccion.getLocalidad().getNombre().contentEquals("")) {
+						if (direccion.getLocalidad().getProvincia() != null) {
+							if (direccion.getUsuario() != null) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 }

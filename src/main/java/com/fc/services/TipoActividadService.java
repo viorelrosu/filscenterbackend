@@ -31,16 +31,24 @@ public class TipoActividadService {
 
 	// CREA UN NUEVO TIPOACTIVIDAD
 	public TipoActividad saveTipoActividad(TipoActividad tipoActividad) {
-		return tipoActividadRepository.save(tipoActividad);
+		if (validarTipoActividad(tipoActividad)) {
+			return tipoActividadRepository.save(tipoActividad);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UN TIPOACTIVIDAD
 	public TipoActividad updateTipoActividad(Long tipoActividadId, TipoActividad tipoActividadDetails)
 			throws ResourceNotFoundException {
-		TipoActividad tipoActividad = getTipoActividadById(tipoActividadId);
-		tipoActividad.setNombre(tipoActividadDetails.getNombre());
-		final TipoActividad updatedTipoActividad = tipoActividadRepository.save(tipoActividad);
-		return updatedTipoActividad;
+		if (validarTipoActividad(tipoActividadDetails)) {
+			TipoActividad tipoActividad = getTipoActividadById(tipoActividadId);
+			tipoActividad.setNombre(tipoActividadDetails.getNombre());
+			final TipoActividad updatedTipoActividad = tipoActividadRepository.save(tipoActividad);
+			return updatedTipoActividad;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR UN TIPOACTIVIDAD
@@ -50,6 +58,14 @@ public class TipoActividadService {
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
+	}
+
+	// VALIDAR
+	public boolean validarTipoActividad(TipoActividad tipoActividad) {
+		if (tipoActividad.getNombre() != null && !tipoActividad.getNombre().contentEquals("")) {
+			return true;
+		}
+		return false;
 	}
 
 }

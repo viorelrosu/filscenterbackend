@@ -33,26 +33,35 @@ public class ActividadService {
 
 	// CREA UNA NUEVA ACTIVIDAD
 	public Actividad createActividad(Actividad actividad) throws ResourceNotFoundException {
-		TipoActividad tipoActividad = tipoActividadService.getTipoActividadById(actividad.getTipoActividad().getId());
-		actividad.setTipoActividad(tipoActividad);
-		tipoActividad.getActividades().add(actividad);
-		return actividadRepository.save(actividad);
+		if (validarActividad(actividad)) {
+			TipoActividad tipoActividad = tipoActividadService
+					.getTipoActividadById(actividad.getTipoActividad().getId());
+			actividad.setTipoActividad(tipoActividad);
+			tipoActividad.getActividades().add(actividad);
+			return actividadRepository.save(actividad);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UNA ACTIVIDAD
 	public Actividad updateActividad(Long actividadId, Actividad actividadDetails) throws ResourceNotFoundException {
-		Actividad actividad = getActividadById(actividadId);
-		actividad.setNombre(actividadDetails.getNombre());
-		actividad.setDescripcion(actividadDetails.getDescripcion());
-		actividad.setDificultad(actividadDetails.getDificultad());
-		actividad.setColor(actividadDetails.getColor());
-		TipoActividad tipoActividad = actividad.getTipoActividad();
-		tipoActividad.getActividades().remove(actividad);
-		tipoActividad = tipoActividadService.getTipoActividadById(actividadDetails.getTipoActividad().getId());
-		actividad.setTipoActividad(tipoActividad);
-		tipoActividad.getActividades().add(actividad);
-		final Actividad updatedActividad = actividadRepository.save(actividad);
-		return updatedActividad;
+		if (validarActividad(actividadDetails)) {
+			Actividad actividad = getActividadById(actividadId);
+			actividad.setNombre(actividadDetails.getNombre());
+			actividad.setDescripcion(actividadDetails.getDescripcion());
+			actividad.setDificultad(actividadDetails.getDificultad());
+			actividad.setColor(actividadDetails.getColor());
+			TipoActividad tipoActividad = actividad.getTipoActividad();
+			tipoActividad.getActividades().remove(actividad);
+			tipoActividad = tipoActividadService.getTipoActividadById(actividadDetails.getTipoActividad().getId());
+			actividad.setTipoActividad(tipoActividad);
+			tipoActividad.getActividades().add(actividad);
+			final Actividad updatedActividad = actividadRepository.save(actividad);
+			return updatedActividad;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR UNA ACTIVIDAD
@@ -65,5 +74,21 @@ public class ActividadService {
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
+	}
+
+	// VALIDAR
+	public boolean validarActividad(Actividad actividad) {
+		if (actividad.getNombre() != null && !actividad.getNombre().contentEquals("")) {
+			if (actividad.getDescripcion() != null && !actividad.getDescripcion().contentEquals("")) {
+				if (actividad.getColor() != null && !actividad.getColor().contentEquals("")) {
+					if (actividad.getDificultad() != null) {
+						if (actividad.getTipoActividad() != null) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

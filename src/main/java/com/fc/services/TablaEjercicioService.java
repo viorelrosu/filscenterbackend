@@ -34,35 +34,42 @@ public class TablaEjercicioService {
 
 	// CREA UNA NUEVA TABLAEJERCICIO
 	public TablaEjercicio createTablaEjercicio(TablaEjercicio tablaEjercicio) throws ResourceNotFoundException {
-		Usuario monitor = usuarioService.getUsuarioById(tablaEjercicio.getMonitor().getId());
-		tablaEjercicio.setMonitor(monitor);
-		monitor.getTablasEjercicioMonitor().add(tablaEjercicio);
-		Usuario suscriptor = usuarioService.getUsuarioById(tablaEjercicio.getSuscriptor().getId());
-		tablaEjercicio.setSuscriptor(suscriptor);
-		suscriptor.getTablasEjercicioSuscriptor().add(tablaEjercicio);
-		return tablaEjercicioRepository.save(tablaEjercicio);
+		if (validarTablaEjercicio(tablaEjercicio)) {
+			Usuario monitor = usuarioService.getUsuarioById(tablaEjercicio.getMonitor().getId());
+			tablaEjercicio.setMonitor(monitor);
+			monitor.getTablasEjercicioMonitor().add(tablaEjercicio);
+			Usuario suscriptor = usuarioService.getUsuarioById(tablaEjercicio.getSuscriptor().getId());
+			tablaEjercicio.setSuscriptor(suscriptor);
+			suscriptor.getTablasEjercicioSuscriptor().add(tablaEjercicio);
+			return tablaEjercicioRepository.save(tablaEjercicio);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UNA TABLAEJERCICIO
 	public TablaEjercicio updateTablaEjercicio(Long tablaEjercicioId, TablaEjercicio tablaEjercicioDetails)
 			throws ResourceNotFoundException {
-
-		TablaEjercicio tablaEjercicio = getTablaEjercicioById(tablaEjercicioId);
-		tablaEjercicio.setFechaInicio(tablaEjercicioDetails.getFechaInicio());
-		tablaEjercicio.setFechaFin(tablaEjercicioDetails.getFechaFin());
-		tablaEjercicio.setActiva(tablaEjercicioDetails.getActiva());
-		Usuario monitor = tablaEjercicio.getMonitor();
-		monitor.getTablasEjercicioMonitor().remove(tablaEjercicio);
-		monitor = usuarioService.getUsuarioById(tablaEjercicioDetails.getMonitor().getId());
-		tablaEjercicio.setMonitor(monitor);
-		monitor.getTablasEjercicioMonitor().add(tablaEjercicio);
-		Usuario suscriptor = tablaEjercicio.getSuscriptor();
-		suscriptor.getTablasEjercicioSuscriptor().remove(tablaEjercicio);
-		suscriptor = usuarioService.getUsuarioById(tablaEjercicioDetails.getSuscriptor().getId());
-		tablaEjercicio.setSuscriptor(suscriptor);
-		suscriptor.getTablasEjercicioSuscriptor().add(tablaEjercicio);
-		final TablaEjercicio updatedTablaEjercicio = tablaEjercicioRepository.save(tablaEjercicio);
-		return updatedTablaEjercicio;
+		if (validarTablaEjercicio(tablaEjercicioDetails)) {
+			TablaEjercicio tablaEjercicio = getTablaEjercicioById(tablaEjercicioId);
+			tablaEjercicio.setFechaInicio(tablaEjercicioDetails.getFechaInicio());
+			tablaEjercicio.setFechaFin(tablaEjercicioDetails.getFechaFin());
+			tablaEjercicio.setActiva(tablaEjercicioDetails.getActiva());
+			Usuario monitor = tablaEjercicio.getMonitor();
+			monitor.getTablasEjercicioMonitor().remove(tablaEjercicio);
+			monitor = usuarioService.getUsuarioById(tablaEjercicioDetails.getMonitor().getId());
+			tablaEjercicio.setMonitor(monitor);
+			monitor.getTablasEjercicioMonitor().add(tablaEjercicio);
+			Usuario suscriptor = tablaEjercicio.getSuscriptor();
+			suscriptor.getTablasEjercicioSuscriptor().remove(tablaEjercicio);
+			suscriptor = usuarioService.getUsuarioById(tablaEjercicioDetails.getSuscriptor().getId());
+			tablaEjercicio.setSuscriptor(suscriptor);
+			suscriptor.getTablasEjercicioSuscriptor().add(tablaEjercicio);
+			final TablaEjercicio updatedTablaEjercicio = tablaEjercicioRepository.save(tablaEjercicio);
+			return updatedTablaEjercicio;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR UNA TABLAEJERCICIO
@@ -91,5 +98,21 @@ public class TablaEjercicioService {
 	// DEVUELVE UNA TABLA DE EJERCICIOS POR SUSCRIPTOR
 	public List<TablaEjercicio> getTablaEjerciciosBySuscriptor(Long usuarioId) throws ResourceNotFoundException {
 		return (List<TablaEjercicio>) usuarioService.getUsuarioById(usuarioId).getTablasEjercicioSuscriptor();
+	}
+
+	// VALIDAR
+	public boolean validarTablaEjercicio(TablaEjercicio tablaEjercicio) {
+		if (tablaEjercicio.getFechaInicio() != null) {
+			if (tablaEjercicio.getFechaFin() != null) {
+				if (tablaEjercicio.getActiva() != null) {
+					if (tablaEjercicio.getMonitor() != null) {
+						if (tablaEjercicio.getSuscriptor() != null) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

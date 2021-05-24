@@ -3,7 +3,6 @@ package com.fc.domain;
 import java.util.Collection;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -17,7 +16,6 @@ public class Taquilla {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty
 	private Integer numero;
 
 	@JsonIgnore

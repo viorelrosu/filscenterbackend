@@ -31,18 +31,26 @@ public class TipoSuscripcionService {
 
 	// CREA UN NUEVO TIPOSUSCRIPCION
 	public TipoSuscripcion saveTipoSuscripcion(TipoSuscripcion tipoSuscripcion) {
-		return tipoSuscripcionRepository.save(tipoSuscripcion);
+		if (validarTipoSuscripcion(tipoSuscripcion)) {
+			return tipoSuscripcionRepository.save(tipoSuscripcion);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UN TIPOSUSCRIPCION
 	public TipoSuscripcion updateTipoSuscripcion(Long tipoSuscripcionId, TipoSuscripcion tipoSuscripcionDetails)
 			throws ResourceNotFoundException {
-		TipoSuscripcion tipoSuscripcion = getTipoSuscripcionById(tipoSuscripcionId);
-		tipoSuscripcion.setNombre(tipoSuscripcionDetails.getNombre());
-		tipoSuscripcion.setDuracion(tipoSuscripcionDetails.getDuracion());
-		tipoSuscripcion.setTarifa(tipoSuscripcionDetails.getTarifa());
-		final TipoSuscripcion updatedTipoSuscripcion = saveTipoSuscripcion(tipoSuscripcion);
-		return updatedTipoSuscripcion;
+		if (validarTipoSuscripcion(tipoSuscripcionDetails)) {
+			TipoSuscripcion tipoSuscripcion = getTipoSuscripcionById(tipoSuscripcionId);
+			tipoSuscripcion.setNombre(tipoSuscripcionDetails.getNombre());
+			tipoSuscripcion.setDuracion(tipoSuscripcionDetails.getDuracion());
+			tipoSuscripcion.setTarifa(tipoSuscripcionDetails.getTarifa());
+			final TipoSuscripcion updatedTipoSuscripcion = saveTipoSuscripcion(tipoSuscripcion);
+			return updatedTipoSuscripcion;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR UN TIPOSUSCRIPCION
@@ -52,5 +60,17 @@ public class TipoSuscripcionService {
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
+	}
+
+	// VALIDAR
+	public boolean validarTipoSuscripcion(TipoSuscripcion tipoSuscripcion) {
+		if (tipoSuscripcion.getNombre() != null && !tipoSuscripcion.getNombre().contentEquals("")) {
+			if (tipoSuscripcion.getDuracion() != null) {
+				if (tipoSuscripcion.getTarifa() != null) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

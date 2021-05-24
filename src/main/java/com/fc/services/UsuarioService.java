@@ -53,57 +53,69 @@ public class UsuarioService {
 
 	// CREA UN NUEVO USUARIO
 	public Usuario saveUsuario(Usuario usuario) throws ResourceNotFoundException {
-		Rol rol = rolService.getRolById(usuario.getRol().getId());
-		usuario.setRol(rol);
-		rol.getUsuarios().add(usuario);
-		return usuarioRepository.save(usuario);
+		if (validarUsuario(usuario)) {
+			Rol rol = rolService.getRolById(usuario.getRol().getId());
+			usuario.setRol(rol);
+			rol.getUsuarios().add(usuario);
+			return usuarioRepository.save(usuario);
+		} else {
+			return null;
+		}
 	}
 
 	// DAR DE ALTA UN NUEVO USUARIO
 	public Usuario altaUsuario(Usuario usuario) throws ResourceNotFoundException {
-		Rol rol = rolService.getRolById(usuario.getRol().getId());
-		usuario.setRol(rol);
-		rol.getUsuarios().add(usuario);
-		Direccion direccion = usuario.getDireccion();
-		usuario.setDireccion(null);
-		usuario = usuarioRepository.save(usuario);
-		usuario.setNumeroTarjeta(usuario.getId());
-		usuario = usuarioRepository.save(usuario);
-		direccion.setUsuario(usuario);
-		direccionService.saveDireccion(direccion);
-		return getUsuarioById(usuario.getId());
+		if (validarUsuario(usuario)) {
+			Rol rol = rolService.getRolById(usuario.getRol().getId());
+			usuario.setRol(rol);
+			rol.getUsuarios().add(usuario);
+			Direccion direccion = usuario.getDireccion();
+			usuario.setDireccion(null);
+			usuario = usuarioRepository.save(usuario);
+			usuario.setNumeroTarjeta(usuario.getId());
+			usuario = usuarioRepository.save(usuario);
+			direccion.setUsuario(usuario);
+			direccionService.saveDireccion(direccion);
+			return getUsuarioById(usuario.getId());
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UN USUARIO
 	public Usuario updateUsuario(Long usuarioId, Usuario usuarioDetails) throws ResourceNotFoundException {
-		Usuario usuario = getUsuarioById(usuarioId);
-		usuario.setNombre(usuarioDetails.getNombre());
-		usuario.setApellidos(usuarioDetails.getApellidos());
-		usuario.setDni(usuarioDetails.getDni());
-		usuario.setEmail(usuarioDetails.getEmail());
-		usuario.setPassword(usuarioDetails.getPassword());
-		usuario.setTelefono(usuarioDetails.getTelefono());
-		usuario.setFechaNacimiento(usuarioDetails.getFechaNacimiento());
-		usuario.setCuentaBancaria(usuarioDetails.getCuentaBancaria());
-		usuario.setBiografia(usuarioDetails.getBiografia());
-		usuario.setImagen(usuarioDetails.getImagen());
-		Direccion direccion = usuario.getDireccion();
-		direccion = direccionService.updateDireccion(direccion.getId(), usuarioDetails.getDireccion());
-		usuario.setDireccion(direccion);
-		Rol rol = usuario.getRol();
-		rol.getUsuarios().remove(usuario);
-		rol = rolService.getRolById(usuarioDetails.getRol().getId());
-		usuario.setRol(rol);
-		rol.getUsuarios().add(usuario);
-		Taquilla taquilla = usuario.getTaquilla();
-		if (taquilla != null) {
-			taquilla.getUsuarios().remove(usuario);
+		if (validarUsuario(usuarioDetails)) {
+			Usuario usuario = getUsuarioById(usuarioId);
+			usuario.setNombre(usuarioDetails.getNombre());
+			usuario.setApellidos(usuarioDetails.getApellidos());
+			usuario.setDni(usuarioDetails.getDni());
+			usuario.setEmail(usuarioDetails.getEmail());
+			usuario.setPassword(usuarioDetails.getPassword());
+			usuario.setTelefono(usuarioDetails.getTelefono());
+			usuario.setFechaNacimiento(usuarioDetails.getFechaNacimiento());
+			usuario.setCuentaBancaria(usuarioDetails.getCuentaBancaria());
+			usuario.setBiografia(usuarioDetails.getBiografia());
+			usuario.setImagen(usuarioDetails.getImagen());
+			Direccion direccion = usuario.getDireccion();
+			direccion = direccionService.updateDireccion(direccion.getId(), usuarioDetails.getDireccion());
+			usuario.setDireccion(direccion);
+			Rol rol = usuario.getRol();
+			rol.getUsuarios().remove(usuario);
+			rol = rolService.getRolById(usuarioDetails.getRol().getId());
+			usuario.setRol(rol);
+			rol.getUsuarios().add(usuario);
+			Taquilla taquilla = usuario.getTaquilla();
+			if (taquilla != null) {
+				taquilla.getUsuarios().remove(usuario);
+			}
+			taquilla = taquillaService.getTaquillaById(usuarioDetails.getTaquilla().getId());
+			usuario.setTaquilla(taquilla);
+			taquilla.getUsuarios().add(usuario);
+			final Usuario updatedUsuario = usuarioRepository.save(usuario);
+			return updatedUsuario;
+		} else {
+			return null;
 		}
-		taquilla = taquillaService.getTaquillaById(usuarioDetails.getTaquilla().getId());
-		usuario.setTaquilla(taquilla);
-		taquilla.getUsuarios().add(usuario);
-		final Usuario updatedUsuario = usuarioRepository.save(usuario);
-		return updatedUsuario;
 	}
 
 	// BORRAR UN USUARIO
@@ -131,11 +143,10 @@ public class UsuarioService {
 	public String resetPassword(Long id) throws ResourceNotFoundException, NoSuchAlgorithmException {
 		Usuario usuario = getUsuarioById(id);
 		String password = cadenaAleatoria(15);
-	    MessageDigest md = MessageDigest.getInstance("MD5");
-	    md.update(password.getBytes());
-	    byte[] digest = md.digest();
-	    String passwordHash = DatatypeConverter
-	      .printHexBinary(digest);
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		md.update(password.getBytes());
+		byte[] digest = md.digest();
+		String passwordHash = DatatypeConverter.printHexBinary(digest);
 		usuario.setPassword(passwordHash);
 		updateUsuario(id, usuario);
 		return password;
@@ -155,5 +166,27 @@ public class UsuarioService {
 	// DEVUELVE UNA LISTA DE USUARIOS CORRESPONDIENTES A UN ROL
 	public List<Usuario> getUsuariosByRol(Long usuarioId) throws ResourceNotFoundException {
 		return (List<Usuario>) rolService.getRolById(usuarioId).getUsuarios();
+	}
+
+	// VALIDAR
+	public boolean validarUsuario(Usuario usuario) {
+		if (usuario.getNombre() != null && !usuario.getNombre().contentEquals("")) {
+			if (usuario.getApellidos() != null && !usuario.getApellidos().contentEquals("")) {
+				if (usuario.getPassword() != null && !usuario.getPassword().contentEquals("")) {
+					if (usuario.getDni() != null && !usuario.getDni().contentEquals("")) {
+						if (usuario.getEmail() != null && !usuario.getEmail().contentEquals("")) {
+							if (usuario.getTelefono() != null && !usuario.getTelefono().contentEquals("")) {
+								if (usuario.getFechaNacimiento() != null) {
+									if (usuario.getRol() != null) {
+										return true;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

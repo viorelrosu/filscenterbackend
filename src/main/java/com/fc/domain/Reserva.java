@@ -3,7 +3,6 @@ package com.fc.domain;
 import java.util.Date;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "reserva")
@@ -14,10 +13,8 @@ public class Reserva {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull
 	private Boolean recurrente;
 	
-	@NotNull
 	private Date fechaInicio;
 
 	@ManyToOne

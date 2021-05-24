@@ -39,23 +39,31 @@ public class LocalidadService {
 
 	// CREA UNA NUEVA LOCALIDAD
 	public Localidad saveLocalidad(Localidad localidad) throws ResourceNotFoundException {
-		Provincia provincia = provinciaService.getProvinciaById(localidad.getProvincia().getId());
-		localidad.setProvincia(provincia);
-		provincia.getLocalidades().add(localidad);
-		return localidadRepository.save(localidad);
+		if (validarLocalidad(localidad)) {
+			Provincia provincia = provinciaService.getProvinciaById(localidad.getProvincia().getId());
+			localidad.setProvincia(provincia);
+			provincia.getLocalidades().add(localidad);
+			return localidadRepository.save(localidad);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UNA LOCALIDAD
 	public Localidad updateLocalidad(Long localidadId, Localidad localidadDetails) throws ResourceNotFoundException {
-		Localidad localidad = getLocalidadById(localidadId);
-		localidad.setNombre(localidadDetails.getNombre());
-		Provincia provincia = localidad.getProvincia();
-		provincia.getLocalidades().remove(localidad);
-		provincia = provinciaService.getProvinciaById(localidadDetails.getProvincia().getId());
-		localidad.setProvincia(provincia);
-		provincia.getLocalidades().add(localidad);
-		final Localidad updatedLocalidad = localidadRepository.save(localidad);
-		return updatedLocalidad;
+		if (validarLocalidad(localidadDetails)) {
+			Localidad localidad = getLocalidadById(localidadId);
+			localidad.setNombre(localidadDetails.getNombre());
+			Provincia provincia = localidad.getProvincia();
+			provincia.getLocalidades().remove(localidad);
+			provincia = provinciaService.getProvinciaById(localidadDetails.getProvincia().getId());
+			localidad.setProvincia(provincia);
+			provincia.getLocalidades().add(localidad);
+			final Localidad updatedLocalidad = localidadRepository.save(localidad);
+			return updatedLocalidad;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR UNA LOCALIDAD
@@ -74,6 +82,16 @@ public class LocalidadService {
 	// DEVUELVE UNA LISTA DE LOCALIDADES CORRESPONDIENTES A UNA PROVINCIA
 	public List<Localidad> getLocalidadesByProvincia(Long provinciaId) throws ResourceNotFoundException {
 		return (List<Localidad>) provinciaService.getProvinciaById(provinciaId).getLocalidades();
+	}
+
+	// VALIDAR
+	public boolean validarLocalidad(Localidad localidad) {
+		if (localidad.getNombre() != null && !localidad.getNombre().contentEquals("")) {
+			if (localidad.getProvincia() != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

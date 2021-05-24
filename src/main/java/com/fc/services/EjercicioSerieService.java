@@ -43,44 +43,53 @@ public class EjercicioSerieService {
 	// CREA UN NUEVO EJERCICIO
 	@PostMapping("/ejercicioSerie")
 	public EjercicioSerie createEjercicioSerie(EjercicioSerie ejercicioSerie) throws ResourceNotFoundException {
-		Ejercicio ejercicio = ejercicioService.getEjercicioById(ejercicioSerie.getEjercicio().getId());
-		TablaEjercicio tablaEjercicio = tablaEjercicioService
-				.getTablaEjercicioById(ejercicioSerie.getTablaEjercicio().getId());
-		ejercicioSerie.setEjercicio(ejercicio);
-		ejercicioSerie.setTablaEjercicio(tablaEjercicio);
-		ejercicio.getEjercicioSeries().add(ejercicioSerie);
-		tablaEjercicio.getEjercicioSeries().add(ejercicioSerie);
-		return ejercicioSerieRepository.save(ejercicioSerie);
+		if (validarEjercicioSerie(ejercicioSerie)) {
+			Ejercicio ejercicio = ejercicioService.getEjercicioById(ejercicioSerie.getEjercicio().getId());
+			TablaEjercicio tablaEjercicio = tablaEjercicioService
+					.getTablaEjercicioById(ejercicioSerie.getTablaEjercicio().getId());
+			ejercicioSerie.setEjercicio(ejercicio);
+			ejercicioSerie.setTablaEjercicio(tablaEjercicio);
+			ejercicio.getEjercicioSeries().add(ejercicioSerie);
+			tablaEjercicio.getEjercicioSeries().add(ejercicioSerie);
+			return ejercicioSerieRepository.save(ejercicioSerie);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UN EJERCICIO
 	@PutMapping("/ejercicioSerie/{id}")
 	public EjercicioSerie updateEjercicioSerie(Long ejercicioSerieId, EjercicioSerie ejercicioSerieDetails)
 			throws ResourceNotFoundException {
-
-		EjercicioSerie ejercicioSerie = getEjercicioSerieById(ejercicioSerieId);
-		ejercicioSerie.setSeries(ejercicioSerieDetails.getSeries());
-		ejercicioSerie.setRepeticiones(ejercicioSerieDetails.getRepeticiones());
-		ejercicioSerie.setPorSemana(ejercicioSerieDetails.getPorSemana());
-		Ejercicio ejercicio = ejercicioSerie.getEjercicio();
-		ejercicio.getEjercicioSeries().remove(ejercicioSerie);
-		ejercicio = ejercicioService.getEjercicioById(ejercicioSerieDetails.getEjercicio().getId());
-		ejercicioSerie.setEjercicio(ejercicio);
-		ejercicio.getEjercicioSeries().add(ejercicioSerie);
-		TablaEjercicio tablaEjercicio = ejercicioSerie.getTablaEjercicio();
-		tablaEjercicio.getEjercicioSeries().remove(ejercicioSerie);
-		tablaEjercicio = tablaEjercicioService.getTablaEjercicioById(ejercicioSerieDetails.getTablaEjercicio().getId());
-		ejercicioSerie.setTablaEjercicio(tablaEjercicio);
-		tablaEjercicio.getEjercicioSeries().add(ejercicioSerie);
-		final EjercicioSerie updatedEjercicioSerie = ejercicioSerieRepository.save(ejercicioSerie);
-		return updatedEjercicioSerie;
+		if (validarEjercicioSerie(ejercicioSerieDetails)) {
+			EjercicioSerie ejercicioSerie = getEjercicioSerieById(ejercicioSerieId);
+			ejercicioSerie.setSeries(ejercicioSerieDetails.getSeries());
+			ejercicioSerie.setRepeticiones(ejercicioSerieDetails.getRepeticiones());
+			ejercicioSerie.setPorSemana(ejercicioSerieDetails.getPorSemana());
+			Ejercicio ejercicio = ejercicioSerie.getEjercicio();
+			ejercicio.getEjercicioSeries().remove(ejercicioSerie);
+			ejercicio = ejercicioService.getEjercicioById(ejercicioSerieDetails.getEjercicio().getId());
+			ejercicioSerie.setEjercicio(ejercicio);
+			ejercicio.getEjercicioSeries().add(ejercicioSerie);
+			TablaEjercicio tablaEjercicio = ejercicioSerie.getTablaEjercicio();
+			tablaEjercicio.getEjercicioSeries().remove(ejercicioSerie);
+			tablaEjercicio = tablaEjercicioService
+					.getTablaEjercicioById(ejercicioSerieDetails.getTablaEjercicio().getId());
+			ejercicioSerie.setTablaEjercicio(tablaEjercicio);
+			tablaEjercicio.getEjercicioSeries().add(ejercicioSerie);
+			final EjercicioSerie updatedEjercicioSerie = ejercicioSerieRepository.save(ejercicioSerie);
+			return updatedEjercicioSerie;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR UN EJERCICIO
 	@DeleteMapping("/ejercicioSerie/{id}")
 	public Map<String, Boolean> deleteEjercicioSerie(Long ejercicioSerieId) throws Exception {
 		EjercicioSerie ejercicioSerie = getEjercicioSerieById(ejercicioSerieId);
-		List<EjercicioSerie> ejercicioSeries =(List<EjercicioSerie>) ejercicioSerie.getEjercicio().getEjercicioSeries();
+		List<EjercicioSerie> ejercicioSeries = (List<EjercicioSerie>) ejercicioSerie.getEjercicio()
+				.getEjercicioSeries();
 		ejercicioSeries.remove(ejercicioSerie);
 		ejercicioSerie.getEjercicio().setEjercicioSeries(ejercicioSeries);
 		ejercicioSeries = (List<EjercicioSerie>) ejercicioSerie.getTablaEjercicio().getEjercicioSeries();
@@ -93,7 +102,25 @@ public class EjercicioSerieService {
 	}
 
 	// DEVUELVE UNA LISTA DE LOCALIDADES CORRESPONDIENTES A UNA PROVINCIA
-	public List<EjercicioSerie> getEjerciciosSerieByTablaEjercicio(Long tablaEjercicioId) throws ResourceNotFoundException {
-		return (List<EjercicioSerie>) tablaEjercicioService.getTablaEjercicioById(tablaEjercicioId).getEjercicioSeries();
+	public List<EjercicioSerie> getEjerciciosSerieByTablaEjercicio(Long tablaEjercicioId)
+			throws ResourceNotFoundException {
+		return (List<EjercicioSerie>) tablaEjercicioService.getTablaEjercicioById(tablaEjercicioId)
+				.getEjercicioSeries();
+	}
+
+	// VALIDAR
+	public boolean validarEjercicioSerie(EjercicioSerie ejercicioSerie) {
+		if (ejercicioSerie.getSeries() != null) {
+			if (ejercicioSerie.getRepeticiones() != null) {
+				if (ejercicioSerie.getPorSemana() != null) {
+					if (ejercicioSerie.getEjercicio() != null) {
+						if (ejercicioSerie.getTablaEjercicio() != null) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

@@ -3,7 +3,6 @@ package com.fc.domain;
 import java.util.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -18,27 +17,20 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty
 	private String password;
 
-	@NotEmpty
 	private String nombre;
 
-	@NotEmpty
 	private String apellidos;
 
-	@NotEmpty
 	@Column(unique=true)
 	private String dni;
 
-	@NotEmpty
 	@Column(unique=true)
 	private String email;
 
-	@NotEmpty
 	private String telefono;
 
-	@NotEmpty
 	private Date fechaNacimiento;
 
 	@Column(nullable = true)
@@ -50,6 +42,7 @@ public class Usuario {
 	@Column(nullable = true)
 	private String biografia;
 	
+	@Column(nullable = true)
 	private String imagen;
 
 	@ManyToOne

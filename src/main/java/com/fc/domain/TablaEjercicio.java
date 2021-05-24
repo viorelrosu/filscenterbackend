@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -20,13 +19,10 @@ public class TablaEjercicio {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty
 	private Date fechaInicio;
 
-	@NotEmpty
 	private Date fechaFin;
 
-	@NotEmpty
 	private Boolean activa;
 
 	@JsonIgnore

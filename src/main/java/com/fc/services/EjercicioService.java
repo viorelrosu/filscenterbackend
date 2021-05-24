@@ -34,23 +34,32 @@ public class EjercicioService {
 
 	// CREA UN NUEVO EJERCICIO
 	public Ejercicio createEjercicio(Ejercicio ejercicio) throws ResourceNotFoundException {
-		TipoEjercicio tipoEjercicio = tipoEjercicioService.getTipoEjercicioById(ejercicio.getTipoEjercicio().getId());
-		ejercicio.setTipoEjercicio(tipoEjercicio);
-		tipoEjercicio.getEjercicios().add(ejercicio);
-		return ejercicioRepository.save(ejercicio);
+		if (validarEjercicio(ejercicio)) {
+			TipoEjercicio tipoEjercicio = tipoEjercicioService
+					.getTipoEjercicioById(ejercicio.getTipoEjercicio().getId());
+			ejercicio.setTipoEjercicio(tipoEjercicio);
+			tipoEjercicio.getEjercicios().add(ejercicio);
+			return ejercicioRepository.save(ejercicio);
+		} else {
+			return null;
+		}
 	}
 
 	// ACTUALIZA UN EJERCICIO
 	public Ejercicio updateEjercicio(Long ejercicioId, Ejercicio ejercicioDetails) throws ResourceNotFoundException {
-		Ejercicio ejercicio = getEjercicioById(ejercicioId);
-		ejercicio.setNombre(ejercicioDetails.getNombre());
-		TipoEjercicio tipoEjercicio = ejercicio.getTipoEjercicio();
-		tipoEjercicio.getEjercicios().remove(ejercicio);
-		tipoEjercicio = tipoEjercicioService.getTipoEjercicioById(ejercicioDetails.getTipoEjercicio().getId());
-		ejercicio.setTipoEjercicio(tipoEjercicio);
-		tipoEjercicio.getEjercicios().add(ejercicio);
-		final Ejercicio updatedEjercicio = ejercicioRepository.save(ejercicio);
-		return updatedEjercicio;
+		if (validarEjercicio(ejercicioDetails)) {
+			Ejercicio ejercicio = getEjercicioById(ejercicioId);
+			ejercicio.setNombre(ejercicioDetails.getNombre());
+			TipoEjercicio tipoEjercicio = ejercicio.getTipoEjercicio();
+			tipoEjercicio.getEjercicios().remove(ejercicio);
+			tipoEjercicio = tipoEjercicioService.getTipoEjercicioById(ejercicioDetails.getTipoEjercicio().getId());
+			ejercicio.setTipoEjercicio(tipoEjercicio);
+			tipoEjercicio.getEjercicios().add(ejercicio);
+			final Ejercicio updatedEjercicio = ejercicioRepository.save(ejercicio);
+			return updatedEjercicio;
+		} else {
+			return null;
+		}
 	}
 
 	// BORRAR UN EJERCICIO
@@ -68,7 +77,18 @@ public class EjercicioService {
 
 	// LISTAR EJERCICIOS DE UN MISMO TIPO
 	public List<Ejercicio> getEjerciciosByTipoEjercicio(Long tipoEjercicioId) throws ResourceNotFoundException {
-		//return (List<Ejercicio>) tipoEjercicioService.getTipoEjercicioById(tipoEjercicioId).getEjercicios();
+		// return (List<Ejercicio>)
+		// tipoEjercicioService.getTipoEjercicioById(tipoEjercicioId).getEjercicios();
 		return ejercicioRepository.findAllByTipoEjercicioId(tipoEjercicioId);
+	}
+
+	// VALIDAR
+	public boolean validarEjercicio(Ejercicio ejercicio) {
+		if (ejercicio.getNombre() != null && !ejercicio.getNombre().contentEquals("")) {
+			if (ejercicio.getTipoEjercicio() != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
