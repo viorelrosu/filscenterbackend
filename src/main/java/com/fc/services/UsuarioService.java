@@ -97,6 +97,7 @@ public class UsuarioService {
 			usuario.setBiografia(usuarioDetails.getBiografia());
 			usuario.setImagen(usuarioDetails.getImagen());
 			Direccion direccion = usuario.getDireccion();
+			usuarioDetails.getDireccion().setUsuario(usuario);
 			direccion = direccionService.updateDireccion(direccion.getId(), usuarioDetails.getDireccion());
 			usuario.setDireccion(direccion);
 			Rol rol = usuario.getRol();
@@ -108,9 +109,13 @@ public class UsuarioService {
 			if (taquilla != null) {
 				taquilla.getUsuarios().remove(usuario);
 			}
-			taquilla = taquillaService.getTaquillaById(usuarioDetails.getTaquilla().getId());
-			usuario.setTaquilla(taquilla);
-			taquilla.getUsuarios().add(usuario);
+			if (usuarioDetails.getTaquilla() != null) {
+				taquilla = taquillaService.getTaquillaById(usuarioDetails.getTaquilla().getId());
+				usuario.setTaquilla(taquilla);
+				taquilla.getUsuarios().add(usuario);
+			} else {
+				usuario.setTaquilla(null);
+			}
 			final Usuario updatedUsuario = usuarioRepository.save(usuario);
 			return updatedUsuario;
 		} else {
@@ -147,7 +152,7 @@ public class UsuarioService {
 		md.update(password.getBytes());
 		byte[] digest = md.digest();
 		String passwordHash = DatatypeConverter.printHexBinary(digest);
-		usuario.setPassword(passwordHash);
+		usuario.setPassword(passwordHash.toLowerCase());
 		updateUsuario(id, usuario);
 		return password;
 	}
